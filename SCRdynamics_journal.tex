@@ -19,12 +19,7 @@
 \input{ltx_core/new_cmds.tex}
 
 \begin{document}
-
-% Change to your author name[s] and addresses, in the desired order of authors.
-% First name, middle initial, last name
-% Use title case (upper and lower case letters)
-% Note usage below for corresponding author.
-
+%=======================================================================================================================
 \SetAuthorBlock{Sesha Charla}{School of Mechanical Engineering,\\
    Purdue University,\\
    West Lafayette, Indiana, USA\\
@@ -45,45 +40,30 @@ Purdue University,\\
 West Lafayette, Indiana, USA\\
 email: byao@purdue.edu
 }
-
+%=======================================================================================================================
 \title{Discrete Nonlinear Modelling, Identification and  Diagnostics for Diesel Engine SCR Dynamics}
 
 \keywords{Diesel Engine Aftertreatment System, System Identification, Nonlinear Systems, Hybrid Systems.}
-
-
+%=======================================================================================================================
 %% Abstract should be no more than 250 words
 \begin{abstract}
 	\input{secs/0_abstract.tex}
 \end{abstract}
-
-
-\date{Version \versionno, \today}
-
+%=======================================================================================================================
+\date{Version \versionno , \today}
 \maketitle
-
+%=======================================================================================================================
 \input{secs/1_intro.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Acknowledgment} %% ASME requests this exact spelling, singular.
-
-Acknowledge individuals, institutions, or companies that supported the authors in preparing the work. Those mentioned might have provided technical support, insightful comments or conversations, materials used in the work, or access to facilities.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%=======================================================================================================================
+\section*{Acknowledgment}
+%=======================================================================================================================
 \section*{Funding Data}
-
+%=======================================================================================================================
 \input{secs/0-symb_list.tex}
-
+%=======================================================================================================================
 \appendix   %%% starting appendices
-
 \section{Approximate Mean Residence Time \label{app:res_times}}
-
-%%%%%%%%%%%%%  BIBLIOGRAPHY  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\nocite{*} %% <=== delete this line - unless you wish to typeset the entire contents of your .bib file.
-
-\bibliographystyle{asmejour}   %% .bst file that follows ASME journal format. Do not change.
-
-\bibliography{refs} %% <=== change this to name of your bib file
-
+%=======================================================================================================================
+\bibliographystyle{asmejour}
+\bibliography{refs}
 \end{document}
