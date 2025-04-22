@@ -1,0 +1,3 @@
+[submodule "ltx_core"]
+	path = ltx_core
+	url = git@github.com:SeshaCharla/ltx_core.git
