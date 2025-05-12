@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %%  This file provides the asmejour class for formatting papers in a layout similar to ASME Journal papers.
-%%  
+%%
 %%  The asmejour.cls file should be used with the files asmejour.bst (for citations) and asmejour-template.tex.
 %%
 %%
@@ -27,37 +27,37 @@
 %%		    9. Enable various math and text features from the newtxmath, mathalfa, and newtxtext packages
 %%		   10. Support inclusion of passages in languages other than English
 %%
-%%  This class is compatible with both pdfLaTeX and LuaLaTeX. All packages required by the class 
+%%  This class is compatible with both pdfLaTeX and LuaLaTeX. All packages required by the class
 %%  are in standard distributions, such as TeXLive, and are also available at CTAN (https://ctan.org/).
-%%  The use of an up-to-date (Feb. 2020 or later) and complete LaTeX distribution is strongly recommended. 
+%%  The use of an up-to-date (Feb. 2020 or later) and complete LaTeX distribution is strongly recommended.
 %%
 %%  The title block is set by specific commands that are described in the asmejour-template.tex file.
 %%
 %%  The \section[]{} command's optional argument has been changed to better support pdf bookmarks, and
 %%  \section*[]{} is similarly modified.
 %%
-%%  The class defines abstract environment (with optional keywords) and a nomenclature environment.   
+%%  The class defines abstract environment (with optional keywords) and a nomenclature environment.
 %%  (LaTeX must be run twice to align the columns in the nomenclature list).
-%% 
+%%
  %=========================================================
 %%
 %% LICENSE:
 %%
 %% Copyright (c) 2022 John H. Lienhard
 %%
-%% Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
-%% associated documentation files (the "Software"), to deal in the Software without restriction, 
-%% including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-%% and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, 
+%% Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+%% associated documentation files (the "Software"), to deal in the Software without restriction,
+%% including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+%% and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
 %% subject to the following conditions:
 %%
-%% The above copyright notice and this permission notice shall be included in all copies or 
+%% The above copyright notice and this permission notice shall be included in all copies or
 %% substantial portions of the Software.
 %%
-%% The software is provided "as is", without warranty of any kind, express or implied, including but 
-%% not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. 
-%% in no event shall the authors or copyright holders be liable for any claim, damages or other liability, 
-%% whether in an action of contract, tort or otherwise, arising from, out of or in connection with the 
+%% The software is provided "as is", without warranty of any kind, express or implied, including but
+%% not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
+%% in no event shall the authors or copyright holders be liable for any claim, damages or other liability,
+%% whether in an action of contract, tort or otherwise, arising from, out of or in connection with the
 %% software or the use or other dealings in the software.
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,7 +69,7 @@
 
 \ifdefined\NewDocumentCommand\else
   \RequirePackage{xparse}[2020/02/25]
-\fi 
+\fi
 
 \RequirePackage{etoolbox}
 \RequirePackage{ifthen}
@@ -83,9 +83,9 @@
 	}{%
 	\ClassError{asmeconf}{Your LaTeX format is dated \fmtversion.  Formats dated 2020 or later are recommended for the asmejour class. Older formats may generate errors or fail entirely}{Please UPDATE your LaTeX distribution to obtain best results. TeX Live is available for download at no charge: \string https://www.tug.org/texlive/.  (You can try to click past the errors for now, but your abstract will probably not compile properly.)}%
 }
-	
-\DeclareDocumentCommand\LogNote{m}{%   
-	\IfFormatAtLeastTF{2021/11/15}{% 
+
+\DeclareDocumentCommand\LogNote{m}{%
+	\IfFormatAtLeastTF{2021/11/15}{%
 		\ClassNoteNoLine{asmejour}{#1}% New with the recent LaTeX format
 		}{%
 	    \ClassWarningNoLine{asmejour}{#1}%
@@ -93,9 +93,9 @@
 }
 
 %% provide iftex command \ifpdftex for those still running old distributions
-\IfFormatAtLeastTF{2019/11/07}{% 
+\IfFormatAtLeastTF{2019/11/07}{%
 	\RequirePackage{iftex}% check whether pdftex or another engine is used
-	}{% 
+	}{%
     \LogNote{The asmeconf class requires the missing package iftex---trying a work-around.}
 	% Code copied from iftex package written by the LaTeX3 Project (used under LPPL).
     % \csname and \let construct useful for hiding \ifzzz tokens from outer level \if tests.
@@ -206,7 +206,7 @@
       \aj@setpdfatrue
       \PassOptionsToPackage{pdfa,pdfapart=3,pdfaconformance=u}{hyperref}%
 	}
-	%%% to select part 1, 2 or 3 
+	%%% to select part 1, 2 or 3
 	\define@key{pdfaopt}{pdfapart}[3]{%
       \PassOptionsToPackage{pdfapart=#1}{hyperref}%
 	  \ifthenelse{\equal{#1}{1}}{\aj@pdfaonetrue}{\relax}%
@@ -230,11 +230,11 @@
 
 %%%%%%%%%%  Further class options   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Option to obtain line numbers [lineno] 
+%%% Option to obtain line numbers [lineno]
 \newif\ifaj@lineno\aj@linenofalse
 \DeclareOption{lineno}{\aj@linenotrue}
 
-%%% Option to balance column height on last page [balance] 
+%%% Option to balance column height on last page [balance]
 \newif\ifaj@balance\aj@balancefalse
 \DeclareOption{balance}{\aj@balancetrue}
 
@@ -255,11 +255,11 @@
 \DeclareOption{nocopyright}{%
    \AtBeginDocument{\fancypagestyle{title}{%
       \fancyhf{}
-      \fancyfoot[RO]{\large\sffamily \@PreprintStringR\space\space\bfseries/\space\space\@PaperNumber\thepage} 
-      \fancyfoot[LO]{\large\bfseries\sffamily Journal of \@JourName} 
+      \fancyfoot[RO]{\large\sffamily \@PreprintStringR\space\space\bfseries/\space\space\@PaperNumber\thepage}
+      \fancyfoot[LO]{\large\bfseries\sffamily Journal of \@JourName}
       \fancyfoot[CO]{}
       }
-    }   
+    }
 }
 
 %% Option for copyright notice if all authors are government employees [govt]
@@ -314,12 +314,12 @@
 \setlength\parindent{3.5mm}
 %% ASME's pdf pages are 11.25 in. tall, not 11.00 in.
 
-\RequirePackage[sort&compress,numbers]{natbib} 
+\RequirePackage[sort&compress,numbers]{natbib}
 \AtBeginDocument{\def\NAT@space{\relax}}%   ASME puts no space between numerical references (2020/04/05)
 \setlength\bibsep{0pt plus 1pt minus 0pt}%  ASME keeps this tight
 \renewcommand*{\bibfont}{\footnotesize}
 
-\RequirePackage{graphicx} 
+\RequirePackage{graphicx}
 \ifpdf\def\MyColorOption{fixpdftex}\else\ifluatex\def\MyColorOption{luatex}\else\def\MyColorOption{}\fi\fi
 \RequirePackage[hyperref,\MyColorOption,dvipsnames,svgnames,x11names]{xcolor}
 
@@ -331,7 +331,7 @@
 
 %%%%%%%%%%%%%  Table related   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage{array} 
+\RequirePackage{array}
 
 \RequirePackage{dcolumn}%  column alignment on decimal places
 \newcolumntype{d}[1]{D{.}{.}{#1}}
@@ -377,14 +377,14 @@
 \RequirePackage{mathtools}% loads and extends amsmath
 \RequirePackage[]{babel}
 
-\RequirePackage[]{newtxtext} 
-\RequirePackage[varl,varqu]{inconsolata}% sans typewriter font; restored varl, varqu 2020/08/10 
+\RequirePackage[]{newtxtext}
+\RequirePackage[varl,varqu]{inconsolata}% sans typewriter font; restored varl, varqu 2020/08/10
 \RequirePackage[]{newtxmath}
 
 %% override \textsu if using default superiors
 \ifthenelse{\boolean{DefaultSups}}{\let\textsu\textsuperscript}{\relax}
-  
-\RequirePackage[]{mathalfa}% load optional fonts for Calligraphy, Script, etc. 
+
+\RequirePackage[]{mathalfa}% load optional fonts for Calligraphy, Script, etc.
 
 \RequirePackage{bm}%  load after all math for expanded access to bold math
 
@@ -403,14 +403,14 @@
 %% These adjustments affect line breaking; the values below are intended to produce
 %% fewer lines with large spaces, without creating the problems of using \fussy in two-column mode.
 \tolerance 2500
-\emergencystretch 3em 
+\emergencystretch 3em
 
-%% TeX Gyre Heros Condensed is qhvc (regular is qhv). 
-\newcommand*{\CondSans}{\selectfont\fontfamily{qhvc}\selectfont} 
+%% TeX Gyre Heros Condensed is qhvc (regular is qhv).
+\newcommand*{\CondSans}{\selectfont\fontfamily{qhvc}\selectfont}
 \renewcommand\huge{\@setfontsize\huge{14}{14}}        %... for author names only
-\newcommand*{\CondSansBold}{\renewcommand\bfdefault{b}\selectfont\fontfamily{qhvc}\selectfont\bfseries} 
+\newcommand*{\CondSansBold}{\renewcommand\bfdefault{b}\selectfont\fontfamily{qhvc}\selectfont\bfseries}
 \renewcommand\Huge{\@setfontsize\Huge{26.5}{26.5}}    %... for title font only
-  
+
 \RequirePackage{metalogo,hologo}% Access to various LaTeX logos (for use in the documentation)
 
 %% This provides sans serif italic and sans serif bold italic math.
@@ -425,7 +425,7 @@
 \SetSymbolFont{operators}{sansbold}{\encodingdefault}{\sfdefault}{\bfdefault}{n}
 \SetMathAlphabet{\mathsf}{sansbold}{\encodingdefault}{\sfdefault}{b}{n}% \mathsf is upright
 
-%% These lines are to provide math accents for the sans and sansbold math versions.  
+%% These lines are to provide math accents for the sans and sansbold math versions.
 %% The accents from ntxsfmi work normally with regular times fonts. Added 2021/01/27
 \DeclareSymbolFont{lettersAB}{U}{ntxsfmia}{m}{it}
 \SetSymbolFont{lettersAB}{normal}{U}{ntxsfmia}{m}{it}
@@ -445,7 +445,7 @@
 
 %% Provide sans-serif *upright* Greek letters, following a suggestion by Michael Sharpe.  2021/12/22
 %% Following Sharpe's newtxsf implementation of the STIX fonts, under the LaTeX Project Public License.
-%% (Note that \mathversion{sansbold} provides sans-serif *italic* Greek letters.) 
+%% (Note that \mathversion{sansbold} provides sans-serif *italic* Greek letters.)
 
 \DeclareMathSymbol{\sfGamma}{\mathalpha}{lettersAB}{0}% adjust to avoid overwriting newtxmath commands,
 \DeclareMathSymbol{\sfDelta}{\mathalpha}{lettersAB}{1}
@@ -537,17 +537,17 @@
 
 \ifaj@lineno
     \RequirePackage[switch,mathlines]{lineno}%
-    \renewcommand{\linenumberfont}{\normalfont\footnotesize\color{red}}% 
+    \renewcommand{\linenumberfont}{\normalfont\footnotesize\color{red}}%
     \AtBeginDocument{\linenumbers}%
     \ifaj@balance
 		\ClassWarningNoLine{asmejour}{Package lineno loaded, so final column balancing will be disabled}%
 	\fi
     %%% Allow line numbering in AMS math environments.
-    %%% postdisplaypenalty adjusted to avoid extra line number at end, see discussion here: https://tex.stackexchange.com/a/461192/ 
+    %%% postdisplaypenalty adjusted to avoid extra line number at end, see discussion here: https://tex.stackexchange.com/a/461192/
     %%% multline has some problem that puts an extra line number above it.
     %%% Requires xparse and etoolbox
     \NewDocumentCommand{\aj@losepostpenalty}{}{\patchcmd{\linenomathWithnumbers}{\advance\postdisplaypenalty\linenopenalty}{}{}{}}%
-%    
+%
     \NewDocumentCommand{\aj@FixAMSMath}{m}{%
     	\AtBeginEnvironment{#1}{\aj@losepostpenalty\linenomath}%
     	\AtEndEnvironment{#1}{\endlinenomath}%
@@ -606,10 +606,10 @@
 \pagestyle{fancy}
 
 \fancyhf{}% clear all header and footer fields
-\renewcommand{\headrulewidth}{0pt} 
+\renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
-\fancyfoot[RE]{\large\bfseries\sffamily Transactions of the ASME} 
-\fancyfoot[LO]{\large\bfseries\sffamily Journal of \@JourName} 
+\fancyfoot[RE]{\large\bfseries\sffamily Transactions of the ASME}
+\fancyfoot[LO]{\large\bfseries\sffamily Journal of \@JourName}
 \fancyfoot[RO]{\large\sffamily \@PreprintStringR\space\space\bfseries/\space\space\@PaperNumber\thepage}
 \fancyfoot[LE]{\large\sffamily {\bfseries \@PaperNumber\thepage\space\space/}\space\space\@PreprintStringL\ }
 
@@ -617,8 +617,8 @@
     \fancyhf{}% clear all header and footer fields
     \renewcommand{\headrulewidth}{0pt}
     \renewcommand{\footrulewidth}{0pt}
-    \fancyfoot[RO]{\large\sffamily \@PreprintStringR\space\space\bfseries/\space\space\@PaperNumber\thepage} 
-    \fancyfoot[LO]{\large\bfseries\sffamily Journal of \@JourName} 
+    \fancyfoot[RO]{\large\sffamily \@PreprintStringR\space\space\bfseries/\space\space\@PaperNumber\thepage}
+    \fancyfoot[LO]{\large\bfseries\sffamily Journal of \@JourName}
     \fancyfoot[CO]{\large\bfseries\sffamily Copyright \textcopyright\ \@PaperYear\ by ASME}
 }
 
@@ -639,8 +639,8 @@
 %% reduce indentation of footnotes
 \renewcommand\@makefntext[1]{%
   \noindent\makebox[4mm][r]{\@makefnmark}\hyphenpenalty=300\exhyphenpenalty=300 #1}% <== suppress hyphenation
-  
-%% Produces an unmarked footnote about the revision date. 
+
+%% Produces an unmarked footnote about the revision date.
 %% This command is invoked by \date as part of \MakeTitlePage below.
 %% Text can be anything given as the argument to \date{..}.
 \NewDocumentCommand{\revfootnote}{m}{\begin{NoHyper}\def\@thefnmark{}\@footnotetext{\hspace{-3pt}#1}\end{NoHyper}}% \gdef -->\def 2021/12/23
@@ -655,7 +655,7 @@
 \let\oldfootnote\footnote
 \renewcommand\footnote[1]{%
     \oldfootnote{#1}\futurelet\nextToken\isOtherfnote}
-    
+
 \newcommand\isOtherfnote{%
     \ifx\footnote\nextToken\textsu{\mdseries,}%
     \fi%
@@ -664,8 +664,8 @@
 %%%%%%%%%  Caption Related  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \addto{\captionsenglish}{%
-  \renewcommand{\figurename}{Fig.}  
-  \renewcommand{\tablename}{Table}  
+  \renewcommand{\figurename}{Fig.}
+  \renewcommand{\tablename}{Table}
 }
 
 \RequirePackage[labelfont={sf,bf},hypcap=false]{caption}
@@ -675,13 +675,13 @@
 \DeclareCaptionTextFormat{sansmath}{\mathversion{sans}#1}% strictly speaking, this is unnecessary.
 
 \captionsetup[figure]{labelfont={sf,bf},textfont={sf,bf},textformat=boldmath,labelsep=quad}
-\captionsetup[table]{labelfont={sf,bf},textfont={sf,bf},textformat=boldmath,labelsep=quad,skip=0.5\baselineskip} 
+\captionsetup[table]{labelfont={sf,bf},textfont={sf,bf},textformat=boldmath,labelsep=quad,skip=0.5\baselineskip}
 
 %% 30 January 2021. ASME only labels subfigures with a sans serif, italic (a), (b),... no caption text, no bold face.
 \captionsetup[subfigure]{labelfont={sf},textfont={sf},textformat=sansmath,labelformat=simple}% default: =parens
 \renewcommand\thesubfigure{(\textit{\alph{subfigure}})}
 
-\captionsetup[subtable]{labelfont={sf},textfont={sf},textformat=sansmath,labelformat=simple} 
+\captionsetup[subtable]{labelfont={sf},textfont={sf},textformat=sansmath,labelformat=simple}
 \renewcommand\thesubtable{(\textit{\alph{subtable}})}
 
 
@@ -690,10 +690,10 @@
 \RequirePackage[raggedright,indentafter]{titlesec}
 
 \titleformat{\section}{\mathversion{bold}\bfseries\large\raggedright}{\thesection}{1em}{}
-\titleformat{\subsection}[runin]{\mathversion{bold}\bfseries}{\thesubsection}{1em}{}[.]
-\titleformat{\subsubsection}[runin]{\itshape}{\thesubsubsection}{1em}{}[.]
+\titleformat{\subsection}[runin]{\mathversion{bold}\bfseries}{\thesubsection}{1em}{}[\\]
+\titleformat{\subsubsection}[runin]{\itshape}{\thesubsubsection}{1em}{}[\\]
 
-\titlespacing\section{0pt}{14pt plus 3pt minus 2pt}{3pt plus 2pt minus 1pt} 
+\titlespacing\section{0pt}{14pt plus 3pt minus 2pt}{3pt plus 2pt minus 1pt}
 \titlespacing{\subsection}{\parindent}{12pt plus 3pt minus 2pt}{0.5em}
 \titlespacing{\subsubsection}{\parindent}{12pt plus 3pt minus 2pt}{0.5em}
 
@@ -702,11 +702,11 @@
 \titleformat{\paragraph}[runin]{\itshape}{\thesubsubsection}{0.5em}{}[.]
 \titlespacing{\paragraph}{\parindent}{14pt plus 3pt minus 2pt}{0.5em}
 
-%% Special handling of the appendices            
+%% Special handling of the appendices
 %% Assumes that appendices are the last technical content in paper
 
 \providecommand{\appendicesname}{Appendices}
- 
+
 \RenewDocumentCommand{\appendix}{}{%
     \pdfbookmark[1]{\appendicesname}{appendices}
     \setcounter{section}{0}
@@ -721,9 +721,9 @@
 
 %%%%%%%%%%%%%%%%%  List environments  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage{enumitem}
+% \RequirePackage{enumitem}
 
-\setlist[enumerate,1]{label = (\arabic*), ref = (\arabic*),labelindent=3mm, leftmargin=*,noitemsep}
+% \setlist[enumerate,1]{label = (\arabic*), ref = (\arabic*),labelindent=3mm, leftmargin=*,noitemsep}
 %% I have no examples of sublists...
 
 
@@ -777,26 +777,26 @@
     \fi
 \fi
 
-\RequirePackage{hyperxmp} %% to fix transfer of metadata to Acrobat pdf 
+\RequirePackage{hyperxmp} %% to fix transfer of metadata to Acrobat pdf
 
-\RequirePackage[psdextra]{hyperref} % recent kernel transition suggests providing most hyperref options via \hypersetup, 
+\RequirePackage[psdextra]{hyperref} % recent kernel transition suggests providing most hyperref options via \hypersetup,
 									% but setting psdextra here (for additional math support in bookmarks) 2021/12/23
 \hypersetup{%
     unicode,        % Unicode encoded PDF strings
-	pdfborder={0 0 0},% 
+	pdfborder={0 0 0},%
 	bookmarksnumbered=true,%
 	bookmarksopen=true,%
 	bookmarksopenlevel=1,%
 	colorlinks=true,%
 	linkcolor=blue, %
-	citecolor=blue, % 
-	urlcolor=blue,  % 
+	citecolor=blue, %
+	urlcolor=blue,  %
 	filecolor=red,  % added 2021/12/23, to make certain broken links more apparent
 	pdfnewwindow=true,%
 	pdfpagelayout=SinglePage, %TwoPageRight,% changed 2020/08/12
 	pdfdisplaydoctitle=true%
 }
-	
+
 \urlstyle{same}                % don't switch to typewriter font
 \RequirePackage{doi}           % supports nasty characters in some doi's
 \renewcommand{\doitext}{doi:~} % change the default, {doi:}, to this for ASME specification
@@ -841,7 +841,7 @@
 }
 
 %%% Create an optional argument for unnumbered sections and set pdf bookmark (thru \addcontentsline).
-%%% The optional argument will manually set the pdf bookmark for that section; can be used to avoid hyperref 
+%%% The optional argument will manually set the pdf bookmark for that section; can be used to avoid hyperref
 %%%     errors when macros are in section titles.
 %%% There should not be errors for $$, \cite, \ref, \label, \footnote, or \bm with current construction.
 \let\svsection\section
@@ -862,7 +862,7 @@
 
 %%%%%%%%%%%%%  Define some section and other names for special environments  %%%%%%%
 
-\providecommand{\nomname}{Nomenclature}  
+\providecommand{\nomname}{Nomenclature}
 \providecommand{\keywordname}{Keywords}
 \providecommand{\CAwords}{Corresponding Author.}
 
@@ -938,11 +938,11 @@
    }{%
    \setcounter{savedlength}{\widest}%
    \end{list}%
-} 
-       
+}
+
 %%%%%%%%%%%%%%%%  List of figures and list of tables  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% ASME requires these lists for production. 
+%% ASME requires these lists for production.
 \ifaj@lists
     \AtEndDocument{%
 	    \clearpage
@@ -950,7 +950,7 @@
 		\begin{@twocolumnfalse}
 			\listoffigures
 			\listoftables
-		\end{@twocolumnfalse} 
+		\end{@twocolumnfalse}
 		]%
 	}%
 \else
@@ -991,11 +991,11 @@
 }
 \ifnum\value{authorno}=1
     \JoinCoffins\firstrowauthorblock\authorblock
-    \setlength{\rulecofheight}{\CoffinTotalHeight\firstrowauthorblock} 
+    \setlength{\rulecofheight}{\CoffinTotalHeight\firstrowauthorblock}
   \else
     \JoinCoffins\firstrowauthorblock[hc,b]\authorblock[hc,t](0pt,-\coffinsep)
     \setlength{\rulecofheight}{\CoffinTotalHeight\firstrowauthorblock}
-\fi     
+\fi
 }
 
 
@@ -1017,7 +1017,7 @@
    \SetVerticalCoffin{\Abstract}{114mm}{%
       \noindent\itshape%
       #1
-      \@keywords\par% 
+      \@keywords\par%
       \vspace*{4mm}% <== at bottom of abstract to extend rule
     }
 }
@@ -1028,13 +1028,13 @@
 	\ifdim\Titleheight>\rulecofheight
 	   \setlength{\rulecofheight}{\Titleheight}
 	\else
-	   \addtolength{\rulecofheight}{7.0mm} 
+	   \addtolength{\rulecofheight}{7.0mm}
 	\fi
     \SetHorizontalCoffin \ruleblock {\color{\@ColorName}\rule{2.1mm}{\rulecofheight}}
     \JoinCoffins\firstrowauthorblock[vc,r]\ruleblock[vc,l](\coffinsep,0pt)
     \JoinCoffins\firstrowauthorblock[vc,r]\Title[vc,l](\coffinsep,0pt)
     \centerline{\TypesetCoffin\firstrowauthorblock} %% in this instance, \centerline is better than \centering
-}   
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Corresponding author gets footnote #1 and subsequent notes are 2, 3, ....
@@ -1066,10 +1066,10 @@
     \twocolumn[
       	\begin{@twocolumnfalse}
     	\@ConstructAuthorBlock
-      	\vspace*{\@AbstractSep} 
-      	\end{@twocolumnfalse} 
+      	\vspace*{\@AbstractSep}
+      	\end{@twocolumnfalse}
     ]
-    \ifaj@CA 
+    \ifaj@CA
     	\addtocounter{footnote}{1}
     	\footnotetext{\CAwords\@CAsep \@CAemail}% includes legacy code, will remove \@CA commands eventually
     \fi
@@ -1089,7 +1089,7 @@
 \RenewDocumentCommand{\maketitle}{}{\MakeTitlePage}
 \RenewDocumentCommand{\title}{}{\SetTitle}
 
-\RenewDocumentEnvironment{abstract}{+b}{\gdef\tmp{\@SetAbstract{#1}}\aftergroup\tmp}{\ignorespaces} 
+\RenewDocumentEnvironment{abstract}{+b}{\gdef\tmp{\@SetAbstract{#1}}\aftergroup\tmp}{\ignorespaces}
 %% Thanks to DPC for the suggestion of \gdef\tmp{...
 
 %% Put date as an unnumbered footnote at bottom of first column
@@ -1110,4 +1110,3 @@
 \endinput
 %%
 %% End of file `asmejour.cls'.
-

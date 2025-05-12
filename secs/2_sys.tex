@@ -1,3 +1,88 @@
 \section{SCR-ASC System Description}
 
-The SCR-ASC subsystem in the diesel engine after-treatment systems involves reacting flows
+The SCR-ASC subsystem in the diesel engine after-treatment systems involves reacting flow on the top of a catalyst which adsorbs ammonia from urea decomposition. The following lists all the reactions that take place inside the SCR-ASC chamber.
+
+\begin{enumerate}
+    \item Urea decomposition and Ammonia Adsorption/Desorption:
+    \begin{align*}
+        NH_2 - CO - NH_2^*  &\longrightarrow  HNCO + NH_3 \\
+        HNCO + H_2O &\longrightarrow NH_3 + CO_2 \\
+        %===
+        NH_3 + \Theta_{free} &\leftrightharpoons NH_3(ads)
+    \end{align*}
+
+    \item SCR Reactions:
+    \begin{align*}
+    4 NH_3 (ads) + 4 NO + O_2 &\longrightarrow 4 N_2 + 6 H_2O
+                              & &[\text{Standard}]\\
+    %===
+    2 NH_3 (ads) +  NO + N O_2 &\longrightarrow 2 N_2 + 3 H_2O
+                              & &[\text{Fast}]\\
+    %===
+    4 NH_3 (ads) + 3N O_2 &\longrightarrow 3.5 N_2 + 6 H_2O
+                              & &[\text{Slow}]
+    \end{align*}
+
+    \item Ammonia Oxidation:
+    \begin{align*}
+    4 NH_3 + 3 O_2 &\longrightarrow 2 N_2 + 6 H_2O\\
+    4 NH_3 + 5 O_2 &\longrightarrow 4 NO + 6 H_2 O\\
+    2 NH_3 + 2 O_2 &\longrightarrow N_2O + 3 H_2O
+    \end{align*}
+
+    \item $NO$ Oxidation:
+    \begin{align*}
+    2 NO + O_2 &\longrightarrow 2 NO_2
+    \end{align*}
+\end{enumerate}
+
+
+Note that ammonia oxidation (AMOX) happens both on the surfaces of the SCR catalyst and the ASC catalyst in the
+mechanism that is similar, but SCR catalyst favors $NO_x$ reduction while ASC is specifically designed for ammonia
+oxidation. The Eley-Rideal reaction mechanism \cite{yuan2015diesel}, \cite{hsieh2011development}, \cite{nova2014urea} is
+considered for interpreting the SCR reactions, where one reactant $(NO_x)$ is gaseous, and the other is adsorbed on the
+catalyst surface $(NH_3)$.
+
+Further, in order to keep the model order reasonably low, only the following three prominent reactions are considered:
+\begin{enumerate}
+    \item Standard SCR reaction:
+    \begin{align}
+        4 NH_3 ^{ads} + 4 NO + O_2 &\xrightarrow[]{k_{scr}} 4 N_2 + 6 H_2O \label{eqn::std_scr}
+    \end{align}
+    \item Ammonia Oxidation:
+    \begin{align}
+        4 NH_3^{ads} + 3 O_2 &\xrightarrow[]{k_{oxi}} 2 N_2 + 6 H_2O \label{eqn::amox}
+    \end{align}
+    \item Ammonia Adsorption/Desorption:
+        \begin{align}
+            NH_3 + \Theta_{free} &\xrightleftharpoons[k_{des}]{k_{ads}} NH_3^{ads}
+            \label{eqn::ads}
+        \end{align}
+\end{enumerate}
+
+
+%===============================================================================
+
+\subsection{Model reduction}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.45\textwidth]{figs/2_sys/SCR-ASC_ModelReduction.png}
+    \caption{Schematic of the SCR-ASC reduced model}
+    \label{fig:scr-asc}
+\end{figure}
+
+$\indent$ The ammonia oxidation (AMOX) reactions are similar on SCR and ASC catalysts. First, the gaseous ammonia
+adsorbs onto the catalyst system. Then, the adsorbed ammonia oxidizes into $N_2$ or $NO_x$ based on the temperature and
+other conditions. As the AMOX reactions on both catalysts are similar, it is not possible to distinguish the origin of
+the products from the outlet measurements alone unless measurements between SCR and ASC sections are available.
+
+Thus, oxidation of adsorbed ammonia on both SCR and ASC catalysts can be combined into a single reaction, lumping
+the rate constants and concentrations of the products into parameters and states of a single oxidation reaction. Further
+the nitrogen selectivity of that single AMOX reaction is assumed to be $100\%$. This is valid for temperatures greater
+than $225 \lx{^o}{C}$ \cite{jain2023diagnostics}, i.e., the temperature range of interest for most of the test and road
+conditions.
+
+This aggregation of reactions results in errors in the rate constant estimates, of all the SCR-ASC reactions.
+Specifically, the rate constant estimate for the $NO_x$ reduction will be lower than the actual value as only a part of
+the total adsorbed ammonia (on SCR catalyst) alone is involved in the reduction reaction.
