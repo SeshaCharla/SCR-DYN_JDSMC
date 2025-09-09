@@ -1,20 +1,18 @@
 $\indent$ The existing approach to modelling the reaction flows of diesel engine Selective Catalytic Reduction
 after-treatment (SCR-ASC) system uses a sequence of Continuously Stirred Tank Reactors (CSTRs) (n-cell models) to
-approximate the PDE's that arise from the plug-flow reactions by discretizing in space. This model introduces a
-causality reversal in computation of reaction rates in each cell as they become function of outlet concentrations, i.e,
-the concentrations of the products after the reaction. This approximation breaks down when the n-cell model is reduced
-down to a single-cell in order to have minimal realization of the dynamics. Thus, the CSTR modelling approach requires
-multiple cells to appropriately capture the reaction dynamics, increasing the number of states and parameters that need
-estimation. Further, it is observed that the sampling time for the measurement signals is larger than the actual
-residence time of the reactants in the chamber. Thus, the measurement signals only capture the averaged effects of the
-reactions happening in multiple residence times.
+approximate the PDE's that arise from the plug-flow reactions by discretizing in space.
+% This model introduces a causality reversal in computation of reaction rates in each cell as they become function of
+% outlet concentrations, i.e, the concentrations of the products after the reaction. This approximation breaks down when
+% the n-cell model is reduced down to a single-cell in order to have minimal realization of the dynamics. Thus,
+Such CSTR modelling approach requires multiple cells to appropriately capture the reaction dynamics, increasing the
+number of states and parameters that need estimation. Further, it is observed that the sampling time for the measurement
+signals in real-world systems is larger than the actual residence time of the reactants in the chamber, capturing only the averaged effects of the reactions happening in multiple residence times.
 
-Considering these insights, the present work aims to develop a reduced-order nonlinear discrete model from first
+Considering these insights, the present work develops a reduced-order nonlinear discrete model from first
 principles that can be parametrized into an identifiable model. Instead of discretizing the plug-flow reaction in space,
 we first discretize the system in time considering the interplay between the residence time and sampling time. Then the
-reaction process dynamics in the SCR chamber is lumped and reduced to a few significant reactions whose effect on
-the time evolution of the measurement signals at the inlet and outlet of the chamber is modelled as a set of difference
-equations based on the molar conservation of species. These equations are parametrized as the function of inputs and
-states using approximate models for physical properties such as rate constant and density based on the operating
-conditions of the system. Finally, an identifiable model for the $NO_x$ process dynamics is developed and validated with
-the test-cell data.
+reaction process dynamics in the SCR chamber is lumped and reduced to a few significant reactions whose effect on the
+time evolution of the measurement signals at the inlet and outlet of the chamber is modelled as a set of difference
+equations based on the molar conservation of species. These equations are then parametrized as the function of inputs
+and states using approximate models for physical properties such as rate constant and density based on the operating
+conditions of the system. Finally, an identifiable switched nonlinear model for the $NO_x$ process dynamics is developed and validated with the test-cell data. A novel algorithm for identifying the parameters of the switched model using the relationship between states is also presented.
