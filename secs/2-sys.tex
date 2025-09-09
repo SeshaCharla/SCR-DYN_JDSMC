@@ -1,6 +1,6 @@
 \section{SCR-ASC System Description}
 
-The SCR-ASC subsystem in the diesel engine after-treatment systems involves reacting flow on the top of a catalyst which adsorbs ammonia from urea decomposition. The following lists all the reactions that take place inside the SCR-ASC chamber.
+The SCR-ASC subsystem in the diesel engine after-treatment systems involves reacting flow on the top of a catalyst which adsorbs ammonia from urea decomposition. The following lists all the reactions \cite{nova2014urea} that take place inside the SCR-ASC chamber.
 
 \begin{enumerate}
     \item Urea decomposition and Ammonia Adsorption/Desorption:
@@ -36,14 +36,13 @@ The SCR-ASC subsystem in the diesel engine after-treatment systems involves reac
     \end{align*}
 \end{enumerate}
 
-
 Note that ammonia oxidation (AMOX) happens both on the surfaces of the SCR catalyst and the ASC catalyst in the
 mechanism that is similar, but SCR catalyst favors $NO_x$ reduction while ASC is specifically designed for ammonia
 oxidation. The Eley-Rideal reaction mechanism \cite{yuan2015diesel}, \cite{hsieh2011development}, \cite{nova2014urea} is
-considered for interpreting the SCR reactions, where one reactant $(NO_x)$ is gaseous, and the other is adsorbed on the
-catalyst surface $(NH_3)$.
+considered for modeling the SCR reaction kinetics, where one reactant $(NO_x)$ is gaseous, and the other is adsorbed on
+the catalyst surface $(NH_3)$.
 
-Further, in order to keep the model order reasonably low, only the following three prominent reactions are considered:
+Further, in order to keep the model order reasonably low and parameters identifiable, only the following three prominent reactions are considered:
 \begin{enumerate}
     \item Standard SCR reaction:
     \begin{align*}
@@ -59,7 +58,6 @@ Further, in order to keep the model order reasonably low, only the following thr
             %\label{eqn::ads}
         \end{align*}
 \end{enumerate}
-
 
 %===============================================================================
 
@@ -82,5 +80,4 @@ than $225 \lx{^o}{C}$ \cite{jain2023diagnostics}, i.e., the temperature range of
 conditions.
 
 This aggregation of reactions results in errors in the rate constant estimates, of all the SCR-ASC reactions.
-Specifically, the rate constant estimate for the $NO_x$ reduction will be lower than the actual value as only a part of
-the total adsorbed ammonia (on SCR catalyst) alone is involved in the reduction reaction.
+Specifically, the rate constant estimate for the $NO_x$ reduction $\lr{k_{scr}}$ will have higher (bounded) uncertainty as it becomes dependent on the nitrogen selectivity of AMOX reaction.
