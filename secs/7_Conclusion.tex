@@ -1,1 +1,20 @@
 \section{Conclusion}
+This work developed a uniquely identifiable parametric switched nonlinear model structure for SCR-ASC dynamics based on
+first principles. Rather than relying on spatial discretization with multiple CSTR cells, the approach focused on modeling the temporal evolution of key species concentrations using molar conservation principles. The model explicitly accounts for:
+
+\begin{enumerate}
+        \item Interplay between residence time and sampling time, ensuring the model captures dynamic effects within observable time scales.
+        % \item Higher-order polynomial and reciprocal models for physical properties, including residence time and temperature-dependent rate constants, improving model accuracy. A detailed sensitivity analysis w.r.t the relative changes in the quantities validating the assumptions is also presented wherever possible.
+        \item Catalyst saturation and desaturation dynamics, by explicitly modeling $NO_x$ reduction dynamics under each condition, and implementing a switching mechanism between these states.
+\end{enumerate}
+
+The parameters of the developed nonlinear model are uniquely identifiable from data using convex optimization
+techniques. Specifically, the parameters of the saturated model are estimated by solving a linear programming problem
+that minimizes the area under the "$NO_x$ reduction per time step under saturation" curve, with a lower bound set by
+actual $NO_x$ reduction observed in the data. The identified saturated model is then used to detect catalyst
+desaturation segments, which are then used for parameter estimation of the desaturated model.
+
+Finally, validation against test data demonstrates a significant improvement in capturing system dynamics compared to
+traditional linear CSTR models from the literature. The enhanced model accuracy confirms the effectiveness of the
+proposed approach in characterizing SCR-ASC dynamics and provides a strong foundation for improved diagnostics in diesel
+after-treatment systems.
