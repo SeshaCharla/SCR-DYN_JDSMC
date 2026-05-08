@@ -198,22 +198,24 @@
 
 \newif\ifaj@setpdfa\aj@setpdfafalse
 \newif\ifaj@pdfaone\aj@pdfaonefalse
+\def\aj@pdfapart{3}
+\def\aj@pdfaconformance{u}
 
 \ifpdftex %% pdf/a compliance has only been configured for pdflatex
 %
 	%%% set key [pdfa] to activate pdf/a compliance (default is pdf/A-3u)
 	\define@key{pdfaopt}{pdf-a}[true]{%
       \aj@setpdfatrue
-      \PassOptionsToPackage{pdfa,pdfapart=3,pdfaconformance=u}{hyperref}%
+      \PassOptionsToPackage{pdfa}{hyperref}%
 	}
 	%%% to select part 1, 2 or 3
 	\define@key{pdfaopt}{pdfapart}[3]{%
-      \PassOptionsToPackage{pdfapart=#1}{hyperref}%
+      \def\aj@pdfapart{#1}%
 	  \ifthenelse{\equal{#1}{1}}{\aj@pdfaonetrue}{\relax}%
 	}
 	%% to select conformance b or u.  NB: a is not possible with pdfLaTeX, and u is not possible with 1.
 	\define@key{pdfaopt}{pdfaconformance}[u]{%
-      \PassOptionsToPackage{pdfaconformance=#1}{hyperref}%
+      \def\aj@pdfaconformance{#1}%
 	}
 \else
 	\define@key{pdfaopt}{pdf-a}[true]{%
@@ -320,8 +322,8 @@
 \renewcommand*{\bibfont}{\footnotesize}
 
 \RequirePackage{graphicx}
-\ifpdf\def\MyColorOption{fixpdftex}\else\ifluatex\def\MyColorOption{luatex}\else\def\MyColorOption{}\fi\fi
-\RequirePackage[hyperref,\MyColorOption,dvipsnames,svgnames,x11names]{xcolor}
+\ifpdf\def\MyColorOption{}\else\ifluatex\def\MyColorOption{luatex}\else\def\MyColorOption{}\fi\fi
+\RequirePackage[dvipsnames,svgnames,x11names]{xcolor}
 
 % Nice solution from DPC to prevent aux file errors when switching from pdflatex to lualatex
 \ifx\directlua\undefined
@@ -777,10 +779,13 @@
     \fi
 \fi
 
-\RequirePackage{hyperxmp} %% to fix transfer of metadata to Acrobat pdf
+\RequirePackage[psdextra]{hyperref}
 
-\RequirePackage[psdextra]{hyperref} % recent kernel transition suggests providing most hyperref options via \hypersetup,
+\RequirePackage{hyperxmp} %% to fix transfer of metadata to Acrobat pdf % recent kernel transition suggests providing most hyperref options via \hypersetup,
 									% but setting psdextra here (for additional math support in bookmarks) 2021/12/23
+\ifaj@setpdfa
+  \hypersetup{pdfapart=\aj@pdfapart,pdfaconformance=\aj@pdfaconformance}
+\fi
 \hypersetup{%
     unicode,        % Unicode encoded PDF strings
 	pdfborder={0 0 0},%
