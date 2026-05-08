@@ -1,0 +1,92 @@
+\chapter{Introduction}
+
+Diesel engines offer several practical benefits, such as lower operating costs and higher fuel efficiency. However,
+alongside these advantages, their combustion process produces emissions including unburnt hydrocarbons, carbon monoxide,
+nitrogen oxides, and particulate matter, which are hazardous to health and the environment. Some of these pollutants
+result from incomplete fuel combustion, combustion of engine lubricating oils and other non-hydrocarbon components,
+while others are unavoidable byproducts of the combustion process.
+
+To mitigate these pollutants, an aftertreatment system is installed between the engine outlet and the tailpipe. The
+diesel engine aftertreatment system comprises several subsystems, each designed to target specific exhaust pollutants.
+These subsystems include:
+\begin{enumerate}
+    \item Diesel Oxidation Catalyst (DOC): This component oxidizes unburnt hydrocarbons and carbon monoxide. It also
+        converts $NO$ to $NO_2$, adjusting the $NO/NO_2$ ratio from approximately 9:1 to 1:1 to enhance Selective Catalytic
+        Reduction (SCR) performance \cite{hiremath2015development}.
+
+    \item Diesel Particulate Filter (DPF): This filter removes particulate matter from the exhaust stream. It is
+        positioned downstream of the DOC to utilize the oxidation heat for regeneration.
+
+    \item Selective Catalytic Reduction (SCR) and Ammonia Slip Catalysis (ASC) System: This subsystem catalytically
+        reduces nitrogen oxides ($NO_x$) to nitrogen and water vapor.
+\end{enumerate}
+%============================================================
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{./figs/1-intro/SCR-ASC_Exhaust_Flow.png}
+    \caption{Diesel Aftertreatment System Exhaust Flow Path and Sensor Locations \cite{jain2023model}}
+    \label{fig::exhaust_flow}
+\end{figure}
+%============================================================
+Figure~\ref{fig::exhaust_flow} illustrates the exhaust flow path and sensor locations within the aftertreatment system.
+Both SCR and ASC are constructed as cylindrical bricks, with catalyst coated on the inner surfaces of hollow channels.
+These channels are densely arranged to form the brick structure. Multiple SCR catalyst bricks are stacked within a metal
+canister (Figure~\ref{fig::aftertreatment_system}), with the ASC brick positioned downstream. The placement and flow
+distribution of these components are key design variables.
+%============================================================
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{./figs/1-intro/SCR-ASC_chamber.png}
+    \caption{Diesel Aftertreatment System}
+    \label{fig::aftertreatment_system}
+\end{figure}
+% ============================================================
+The primary function of the SCR system is to convert engine-out NOx into nitrogen and water using ammonia derived from
+urea dosing, which is adsorbed onto the catalyst. Regulation of this catalytic reduction process aims to minimize
+ammonia slip in tailpipe exhaust by two approaches. The first approach employs feedback control, adjusting urea dosing
+based on NOx concentrations at the SCR inlet and tailpipe. The second approach utilizes Ammonia Slip Catalysis, which
+oxidizes excess ammonia at the end of the SCR bed (Figure~\ref{fig::exhaust_scheme}).
+% ============================================================
+\begin{figure}[H]
+        \centering
+        \includegraphics[width=0.75\textwidth]{./figs/1-intro/SCR-ASC_model.png}
+        \caption{Schematic of the SCR-ASC System}
+        \label{fig::exhaust_scheme}
+\end{figure}
+% ============================================================
+The NOx reduction capacity of the catalyst diminishes over time due to hydrothermal aging and the accumulation of
+contaminants, including excess urea, platinum, sulfur, and phosphorus \cite{matsumoto2016model}. While a robust
+urea-dosing controller may attempt to offset catalyst degradation
+\cite{chen2016estimation,herman2010diagnostic,hu2018failure} by increasing urea dosing, this strategy can
+accelerate aging and further elevate NOx and ammonia emissions. This has severe environmental and financial
+implications. Cummins Inc. had to recall 500,000 medium and heavy-duty trucks in 2018 due to faster SCR catalyst
+degradation, resulting in excessive NOx emissions \cite{jain2023model}. On-board diagnostics (OBD) of SCR catalyst aging
+under real-world conditions would help meet increasingly stringent regulations. Some real-world limitations include the
+unavailability of ammonia sensors, the unobservability of catalyst state, and NOx sensor cross-sensitivity to ammonia.
+
+\noindent Accordingly, the principal contributions of this research are as follows:
+\begin{enumerate}
+    \item Development of a new discrete nonlinear switching model that describes the temporal evolution of sensor signals based on control volume and molar conservation principles.
+
+    \item Transformation of the developed model into an identifiable framework for NOx reduction dynamics. Development of a novel parameter estimation algorithm for the switched nonlinear model. Validation of the model using test-cell data.
+
+    \item Identification of parameters sensitive to aging within the nonlinear model. Development of a parameter-estimation-based detector using statistical hypothesis testing for the saturated catalyst dynamic model. Validation of detector performance using both test-cell and real-world truck data.
+\end{enumerate}
+
+% ============================================================
+\input{./secs/1-intro/subs/1-1_OBD.tex}
+\input{./secs/1-intro/subs/1-2_cstr.tex}
+%===========================================================
+
+\section{Approach and Thesis Outline}
+This research conceptualizes catalyst aging detection as a parameter-estimation-based hypothesis testing problem,
+employing the NOx reduction dynamics of the system. This framework leads to several sub-problems, which are addressed in
+the subsequent chapters:
+\begin{enumerate}
+    \item Chapter 2 analyzes the limitations of sensor data and characterizes the associated noise.
+
+    \item Chapters 3 and 4 present the development of a dynamic model for NOx reduction in the SCR-ASC system, with parameters that are both identifiable and validatable using experimental data.
+
+    \item Chapter 5 identifies the subset of parameters sensitive to aging, develops estimators and detectors for aging diagnostics, and validates these methods using test-cell and truck data.
+\end{enumerate}
+The thesis concludes with a summary of contributions, an outline of future work, and a proposal for implementing the developed detector.

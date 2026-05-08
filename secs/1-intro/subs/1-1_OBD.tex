@@ -1,0 +1,62 @@
+\section{Aging Mechanisms and On-Board Diagnostics Review}
+
+Catalyst aging occurs through several distinct mechanisms, each reducing the concentration of adsorption sites required for catalytic reduction. The literature outlines multiple methodologies for investigating these processes:
+\begin{enumerate}
+        \item \itbf{Hydrothermal Aging}: Exposure to heat and water vapor from the exhaust leads to irreversible
+                structural and chemical changes on the catalyst surface, reducing ammonia storage capacity
+                \cite{kim2007modeling}.
+
+        \item \itbf{Chemical Deposits}: Deposits of sulfur, phosphorus, and urea-related compounds obstruct active
+                sites for ammonia adsorption, thereby decreasing storage capacity \cite{kim2007modeling}.
+
+        \item \itbf{Platinum Deposits}: Trace amounts of volatilized platinum from the diesel oxidation catalyst (DOC)
+                can accumulate on the front section of the SCR catalyst
+                \cite{toops2010deactivation,jen2009detection}.
+
+        \item \itbf{Catalyst Formulation-Specific Aging} \cite{daya2018development,daya2020kinetic}: Aging
+                mechanisms depend on the catalyst's chemical composition. Examples include dealumination in Fe-zeolite
+                catalysts \cite{toops2010deactivation} and the sintering of anatase $TiO_2$ (higher surface area per mass)
+                to rutile $TiO_2$ (lower surface area per mass) in titanium dioxide-based catalysts
+                \cite{gieshoff2000improved}.
+\end{enumerate}
+
+Catalyst aging is spatially heterogeneous \cite{cheng2007laboratory}. On-engine dynamometer-accelerated aging results in
+greater degradation at the front of the catalyst compared to the aft \cite{kim2007modeling}. This variation is
+attributed not only to elevated temperatures \cite{toops2010deactivation} but also to the accumulation of metal and
+chemical deposits \cite{kim2007modeling}. Cummins' research on high-fidelity aging models
+\cite{daya2018development,daya2020kinetic} identifies several types of active sites for ammonia storage,
+including Br{\o}nsted acid sites, copper sites, and physisorbed ammonia sites. Two primary sites, S1 and S2, are involved
+in the aging process, and their behavior evolves as aging progresses. Mild aging increases S2 while maintaining a
+constant sum of S1 and S2, whereas severe aging reduces both S1 and S2. The reaction rates for adsorption and desorption
+remain unchanged during mild aging. Standard and fast SCR reactions are largely unaffected by aging
+\cite{daya2018development}. The standard reaction predominantly occurs on S1 sites in a fresh catalyst and shifts to S2
+sites in an aged catalyst. Ammonia oxidation increases with aging on S2 sites. Therefore, it can be concluded that aging
+primarily reduces the concentration of adsorption sites while preserving similar reaction kinetics.
+
+On-board aging diagnostics for SCR-ASC systems are categorized as intrusive or non-intrusive. Intrusive diagnostics
+require intervention in the catalyst's normal operation, using controlled excitation \cite{herman2010diagnostic} of
+specific system dynamics and comparing the resulting responses to a known reference
+\cite{pezzini2009methodology,hu2017improving}. Non-intrusive diagnostics, by contrast, assess the aging state
+without actively modifying system inputs.
+
+Given the significant impact of On-Board Diagnostics (OBD) performance on public health and the environment, the Environmental Protection Agency (EPA) and California Air Resources Board (CARB) have established specific requirements for SCR systems \cite{jain2023model}. Only the regulations relevant to SCR are paraphrased here, as this is the focus of the present review:
+\begin{enumerate}
+        \item \itbf{Malfunction Criterion}: For 2016 and subsequent models, OBD must detect catalyst degradation during Supplemental Emission Test (SET) or Federal Test Procedure (FTP) for a degraded catalyst with NOx emission exceeding 0.2 g/bhp-hr.
+
+        \item \itbf{Enable Conditions}: The enable monitoring conditions must be designed such that:
+        \begin{enumerate}
+                \item OBD must be activated at least once in FTP
+                \item The conditions are expected to occur during normal operations.
+                \item The In-use Performance Ratio (IUMPR) must not be less than 0.3 for 2024 and subsequent models.
+        \end{enumerate}
+
+        \item \itbf{Intrusive Diagnostics}: Intrusive diagnostics are allowed if they have minimal impact on tailpipe emissions or if another diagnostics algorithm has already indicated a fault.
+\end{enumerate}
+
+The In-Use Performance Ratio (IUMPR) is formally defined as the ratio of the number of diagnostic algorithm activations
+to the total number of drive cycles evaluated. The California Code of Regulations specifies a drive cycle as a trip that
+satisfies any of the following four criteria: (1) initiation with engine start and termination with engine shut-off; (2)
+initiation with engine start and conclusion after four hours of continuous engine operation; (3) initiation at the
+conclusion of a preceding four-hour continuous engine operation period; or (4) initiation at the end of a previous
+four-hour continuous engine-on period and termination with engine shut-off. This regulatory framework ensures consistent
+assessment of diagnostic algorithm performance across varying operational scenarios.
