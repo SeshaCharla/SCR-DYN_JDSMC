@@ -57,18 +57,25 @@ $k_{scr}\,\Gamma$ on $T$. Each zone has its own $\theta_{\sat}$.
 % --- Parameter table ---
 \begin{table}[!ht]
     \centering
-    \caption{Parameter estimates of the saturated catalyst model}
+    \caption{$\theta_{\sat}$ estimates ($\theta_{\sat}[i]$: coefficient of $T^i$)}
     \label{tab::sat_parm_est}
-    \begin{tabular}{l l c c c c c c}
+    \begin{tabular}{l l r r r}
         \hline \hline
-        Test & Zone &
-        DG $\theta_{\sat}[2]$ & DG $\theta_{\sat}[1]$ & DG $\theta_{\sat}[0]$ &
-        Aged $\theta_{\sat}[2]$ & Aged $\theta_{\sat}[1]$ & Aged $\theta_{\sat}[0]$ \\
-        \hline \hline
-        RMC      & high & $-0.06$ & $1.43$ & $31.19$ & $-0.07$ & $1.77$ & $27.82$ \\
-        hot-FTP  & high & $-0.49$ & $2.94$ & $40.94$ & $-0.54$ & $3.40$ & $39.59$ \\
-        cold-FTP & high & $-0.19$ & $0.97$ & $40.69$ & $-0.28$ & $1.82$ & $38.97$ \\
-        cold-FTP & low  & $0.26$  & $5.97$ & $45.00$ & $0.39$  & $8.25$ & $50.63$ \\
+        \multicolumn{5}{c}{\textit{Degreened}} \\
+        \hline
+        Test & Zone & $[2]$ & $[1]$ & $[0]$ \\
+        \hline
+        RMC      & high & $-0.06$ & $1.43$ & $31.19$ \\
+        hot-FTP  & high & $-0.49$ & $2.94$ & $40.94$ \\
+        cold-FTP & high & $-0.19$ & $0.97$ & $40.69$ \\
+        cold-FTP & low  & $0.26$  & $5.97$ & $45.00$ \\
+        \hline
+        \multicolumn{5}{c}{\textit{Aged}} \\
+        \hline
+        RMC      & high & $-0.07$ & $1.77$ & $27.82$ \\
+        hot-FTP  & high & $-0.54$ & $3.40$ & $39.59$ \\
+        cold-FTP & high & $-0.28$ & $1.82$ & $38.97$ \\
+        cold-FTP & low  & $0.39$  & $8.25$ & $50.63$ \\
         \hline \hline
     \end{tabular}
 \end{table}
