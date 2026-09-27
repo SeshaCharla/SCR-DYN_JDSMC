@@ -1,0 +1,19 @@
+\section{System Identification \label{sec::sysID}}
+
+The switched model~(\ref{eqn::switched_model}) has two parameter vectors: $\theta_{\sat}$ (saturation
+ceiling,~\ref{eqn::eta_sat}) and $\theta_{\nox}$ (unsaturated dynamics and guard
+condition,~\ref{eqn::eta_bar_dynamics},~\ref{eqn::guard_condition}). The goal is to estimate both from available
+measurement data ($u_1, x_1, u_2, F, T$). The guard condition $G(k) = \phi_g^T(k)\,\theta_{\nox}$ depends on
+$\theta_{\nox}$, so the operating mode is not known a priori. We address this by first estimating $\theta_{\sat}$ via
+linear programming (mode-independent), then using the estimated saturation ceiling to identify data segments near
+saturation, and finally estimating $\theta_{\nox}$ from the remaining unsaturated data.
+
+% ===========================================================
+\input{./secs/3-sysID/1-sat_estimation.tex}
+% ===========================================================
+\input{./secs/3-sysID/2-segment_id.tex}
+% ===========================================================
+\input{./secs/3-sysID/3-unsat_estimation.tex}
+% ===========================================================
+\input{./secs/3-sysID/4-cross_validation.tex}
+% ===========================================================

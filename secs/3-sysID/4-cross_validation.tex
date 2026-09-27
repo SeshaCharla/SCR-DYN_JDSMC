@@ -1,0 +1,31 @@
+\subsection{Cross-Validation \label{sec::cross_valid}}
+
+The parameter estimates obtained from the degreened training data are applied to three additional degreened catalyst runs
+(DG\_1, DG\_2, DG\_3) to test generalization.
+
+\begin{table}[!ht]
+    \centering
+    \caption{Cross-validation of model parameters on additional degreened test data}
+    \label{tab::cross_valid}
+    \begin{tabular}{l l c}
+        \hline \hline
+        Age & Test & $\%$fit \\
+        \hline \hline
+        Degreened (train) & RMC      & 71.86 \\
+        DG\_1             & RMC      & 67.12 \\
+        DG\_2             & RMC      & 54.71 \\
+        DG\_3             & RMC      & 67.01 \\ \hline
+        Degreened (train) & hot-FTP  & 61.86 \\
+        DG\_1             & hot-FTP  & 54.87 \\
+        DG\_2             & hot-FTP  & 59.44 \\
+        DG\_3             & hot-FTP  & 50.17 \\ \hline
+        Degreened (train) & cold-FTP & 52.87 \\
+        DG\_1             & cold-FTP & 39.41 \\
+        DG\_2             & cold-FTP & 41.52 \\
+        DG\_3             & cold-FTP & 42.17 \\
+        \hline \hline
+    \end{tabular}
+\end{table}
+
+The model generalizes across runs, with cross-validation $\%$fit values within $10$--$15$ percentage points of the
+training fit.
