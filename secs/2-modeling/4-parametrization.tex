@@ -95,27 +95,11 @@ Converting to $\bar\eta_F$ space (multiply by $F(k)/u_1(k)$) and parametrizing $
 where $\theta_{\sat} = \Gamma\, \tau_0\, k_{s2v}\, \theta_{scr}$ is a separate parameter vector (not shared with the
 unsaturated dynamics).
 
-% --- Switched model ---
-\subsubsection{Switched Model}
-
-Combining the parametrized unsaturated dynamics~(\ref{eqn::eta_bar_dynamics}) with the saturation
-bounds~(\ref{eqn::eta_bounds}) in $\bar\eta_F$ space:
-\begin{align}
-    \bar\eta_F(k{+}1) = \begin{cases}
-        \bar\eta_F(k) + \phi_{\nox}^T(k)\, \theta_{\nox}
-            & \text{if } 0 \leq (\ref{eqn::eta_bar_dynamics}) \leq \bar\eta_{F,\sat}(k) \\[4pt]
-        \phi_2^T(k)\, \theta_{\sat}
-            & \text{if } (\ref{eqn::eta_bar_dynamics}) > \bar\eta_{F,\sat}(k) \\[4pt]
-        0
-            & \text{if } (\ref{eqn::eta_bar_dynamics}) < 0
-    \end{cases}
-    \label{eqn::switched_model}
-\end{align}
-
 % --- Guard condition ---
 \subsubsection{Guard Condition}
 
-The catalyst remains unsaturated when the net adsorption onto free sites is non-negative. In~(\ref{eqn::eta_bar_dynamics}), the adsorption-related terms are
+The catalyst remains unsaturated when the net adsorption onto free sites is non-negative.
+In~(\ref{eqn::eta_bar_dynamics}), the adsorption-related terms are
 $u_{2F}\,\phi_2\,\theta_\Gamma - u_{2F}\,\bar\eta_F\,\phi_1\,\theta_{\eta_{ads}}$. Setting this $\geq 0$ and
 rearranging into a single inner product:
 \begin{align}
@@ -124,16 +108,24 @@ rearranging into a single inner product:
                     \theta_{\nox} \leq 0
     \label{eqn::guard_condition}
 \end{align}
-When this condition is violated, the dynamics switch to saturated mode. This guard condition is linear in the model
-parameters and can be evaluated from the current state and inputs without knowledge of $\sigma$. The threshold depends
-on the state $\bar\eta_F(k)$ itself, making the model a \textit{self-excited threshold nonlinear autoregressive with
-exogenous input} (SETNARX) structure.
+This guard condition is linear in the model parameters and can be evaluated from the current state and inputs without
+knowledge of $\sigma$. The threshold depends on the state $\bar\eta_F(k)$ itself, making the model a
+\textit{self-excited threshold nonlinear autoregressive with exogenous input} (SETNARX) structure.
 
-% --- Tailpipe NOx ---
-\subsubsection{Tailpipe $\nox$}
+% --- Switched model ---
+\subsubsection{Switched Model}
 
-Converting back from $\bar\eta_F$:
+Using the guard condition~(\ref{eqn::guard_condition}) and the saturation ceiling~(\ref{eqn::eta_sat}), let
+$G(k) = \phi_g^T(k)\,\theta_{\nox}$. The switched dynamics are:
 \begin{align}
-    \eta(k{+}1) &= \bar\eta_F(k{+}1)\, \frac{u_1(k)}{F(k)} \label{eqn::eta_to_nox}\\
-    x_1(k{+}1)  &= u_1(k) - \eta(k{+}1) \label{eqn::tailpipe_nox}
+    \bar\eta_F(k{+}1) = \begin{cases}
+        \bar\eta_F(k) + \phi_{\nox}^T\theta_{\nox}
+            & G(k) \leq 0,\; \bar\eta_F > 0 \\[4pt]
+        \phi_2^T(k)\, \theta_{\sat}
+            & G(k) > 0 \\[4pt]
+        0
+            & \bar\eta_F = 0,\; G(k) \leq 0
+    \end{cases}
+    \label{eqn::switched_model}
 \end{align}
+

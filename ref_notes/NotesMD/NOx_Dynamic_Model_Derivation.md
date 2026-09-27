@@ -255,21 +255,9 @@ $$
 
 $\theta_{sat}$ is a separate parameter vector (not shared with the unsaturated dynamics).
 
-### 4c. The switched model
+### 4c. Guard condition
 
-The switched dynamics (SW) from Step 3, now in $\bar{\eta}_F$ space:
-
-$$
-\boxed{
-\bar{\eta}_F(k{+}1) = \begin{cases}
-\text{(D)} & \text{if } 0 \le \text{(D)} \le \phi_2^T(k)\,\theta_{sat} \\[4pt]
-\phi_2^T(k)\,\theta_{sat} & \text{if } \text{(D)} > \phi_2^T(k)\,\theta_{sat} \\[4pt]
-0 & \text{if } \text{(D)} < 0
-\end{cases}
-}
-$$
-
-**Guard condition.** The adsorption-related terms in (D) are $u_{2F}\,\phi_2\,\theta_\Gamma - u_{2F}\,\bar{\eta}_F\,\phi_1\,\theta_{\eta_{ads}}$. The catalyst remains unsaturated when this is non-negative, which rearranges to:
+The adsorption-related terms in (D) are $u_{2F}\,\phi_2\,\theta_\Gamma - u_{2F}\,\bar{\eta}_F\,\phi_1\,\theta_{\eta_{ads}}$. The catalyst remains unsaturated when this is non-negative, which rearranges to:
 
 $$
 \phi_g^T(k)\,\theta_{NO_x} \le 0, \qquad
@@ -277,7 +265,21 @@ $$
 \theta_{NO_x} = \begin{bmatrix} \theta_{\eta_{ads}} \\ \theta_{\eta_{od}} \\ \theta_{\eta_{scr}} \\ \theta_\Gamma \end{bmatrix}
 $$
 
-When $\phi_g^T\,\theta_{NO_x} > 0$, the system switches to saturated mode. This guard condition is *linear in the model parameters* and can be evaluated without knowing $\sigma$. The threshold depends on the state itself, making the model a **Self-Excited Threshold Nonlinear ARX (SETNARX)** system.
+This guard condition is *linear in the model parameters* and can be evaluated without knowing $\sigma$. The threshold depends on the state $\bar{\eta}_F(k)$ itself, making the model a **Self-Excited Threshold Nonlinear ARX (SETNARX)** system.
+
+### 4d. The switched model
+
+Using the guard condition and the saturation ceiling, the switched dynamics in $\bar{\eta}_F$ space are:
+
+$$
+\boxed{
+\bar{\eta}_F(k{+}1) = \begin{cases}
+\text{(D)} & \text{if } \phi_g^T(k)\,\theta_{NO_x} \le 0 \text{ and } \bar{\eta}_F(k) > 0 \\[4pt]
+\phi_2^T(k)\,\theta_{sat} & \text{if } \phi_g^T(k)\,\theta_{NO_x} > 0 \\[4pt]
+0 & \text{if } \bar{\eta}_F(k) = 0 \text{ and } \phi_{NO_x}^T(k)\,\theta_{NO_x} < 0
+\end{cases}
+}
+$$
 
 **Tailpipe NOx** (converting back from $\bar{\eta}_F$):
 
