@@ -1,0 +1,64 @@
+% §2.3 — Ammonia Adsorption/Desorption Process Dynamics
+% Sources: Thesis/secs/3-governing_eqns/2-NH3ads_proc_dyn.tex
+%          Thesis/secs/3-governing_eqns/2-1-sig_approx.tex
+% ===========================================================
+\subsection{Ammonia Adsorption/Desorption Process Dynamics \label{sec::sigma_deriv}}
+
+% --- Discrete plug-flow figure ---
+% \begin{figure}[!ht]
+%     \centering
+%     \includegraphics[width=\figWidth]{./figs/2-modeling/plug_flow_discrete.png}
+%     \caption{Discrete plug-flow reactor model}
+%     \label{fig::plug_flow_discrete}
+% \end{figure}
+
+The ammonia adsorption/desorption process involves all three reactions. Gaseous ammonia adsorbs onto free catalyst sites,
+then either reacts with gaseous $\nox$ (Eley-Rideal mechanism) or decomposes via ammonia oxidation. Both processes free
+adsorption sites for the next cycle. We first derive the dynamics when the catalyst remains unsaturated and then extend
+the model to include saturation effects. The rate of change of adsorbed ammonia concentration is:
+\begin{align}
+    \dot{\con{\ammonia}}^{ads} &= \Gamma \underbrace{k_{ads} \con{\ammonia}^{in}}_{\gamma_{ads}}
+        - \con{\ammonia}^{ads} \underbrace{\lr{k_{ads} \con{\ammonia}^{in} + k_{des} + k_{scr} \con{\nox}^{in}
+        + k_{oxi}}}_{\gamma_{des}}
+    \label{eqn::sigma_rate}
+\end{align}
+
+% --- Molar conservation at residence-time scale ---
+\subsubsection{Molar Conservation at the Residence-Time Scale}
+Let there be $n$ residence times within one sampling period:
+\begin{align}
+    t_s &= n \tau
+    \label{eqn::ts_2_tau}
+\end{align}
+The molar storage on the catalyst surface changes at the end of every residence time as a fresh parcel of gaseous
+reactants enters the chamber. Within the sample time $t_s$, the volumetric concentrations of the gaseous reactants are
+assumed constant. The molar conservation for adsorbed ammonia can be written telescopically:
+\begin{align*}
+    \con{\ammonia}^{ads}(k + n\tau) &= \con{\ammonia}^{ads} (k)
+        + \underbrace{\sum_{i=0}^{n-1} \int_{0}^{\tau} \dot{\con{\ammonia}}^{ads} (k + i\tau) \, dt}_{\Omega(k)}
+\end{align*}
+where $\Omega(k)$ is the total change in the surface concentration of adsorbed ammonia within one sample time.
+Evaluating the integral under the assumption that the rate is constant within each residence time:
+\begin{align}
+    \Omega(k) &= n \tau \lr{\Gamma \gamma_{ads} (k) - \sigma(k) \gamma_{des} (k)}
+    \label{eqn::omega}
+\end{align}
+where
+\begin{align}
+    \sigma(k) &= \frac{1}{n} \sum_{i=0}^{n-1} \con{\ammonia}^{ads} (k + i \tau)
+    \label{eqn::sigma_def}
+\end{align}
+is the \textit{average surface concentration} of adsorbed ammonia over the sampling period. This quantity is unobservable.
+
+% --- Zero-order hold approximation ---
+\subsubsection{Zero-Order Hold Approximation}
+The average surface concentration $\sigma(k)$ is approximated as the surface concentration at the beginning of the
+sample time: $\sigma(k) \approx \con{\ammonia}^{ads}(k)$. As $n\tau = t_s$ is constant, the discrete update equation
+becomes:
+\begin{align}
+    \sigma^{ub}(k+1) &= \sigma(k) + t_s k_{ads} \con{\ammonia}^{in} (k) \lr{\Gamma - \sigma(k)} \notag\\
+        & \qquad - t_s \lr{k_{oxi} + k_{des}} \sigma(k) - t_s k_{scr} \con{\nox}^{in}(k) \sigma(k)
+    \label{eqn::sigma_ub}
+\end{align}
+where the superscript $ub$ denotes the \textit{unbounded} (pre-saturation) update. The individual terms represent:
+adsorption onto free sites, ammonia oxidation and desorption, and $\nox$ reduction, respectively.

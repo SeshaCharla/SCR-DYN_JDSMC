@@ -1,0 +1,79 @@
+% §2.7 — Switched Model: Saturation, Guard Conditions, and Bounds
+% Sources: Thesis/secs/4-NOx_mdl/2_catalyst_saturation.tex
+%          Thesis/secs/4-NOx_mdl/25_switching_condition.tex
+%          Thesis/secs/4-NOx_mdl/2-subs/parm_est.tex
+% ===========================================================
+\subsection{Switched Model and Catalyst Saturation \label{sec::switched_model}}
+
+The model developed so far assumes the catalyst remains unsaturated at all times. The dynamic model for the catalyst
+surface concentration, when considering saturation and the zero-concentration limit, incorporates the switching function
+$g_{sat}$ (equation~\ref{eqn::g_sat}).
+
+% --- Saturated catalyst dynamics ---
+\subsubsection{Saturated Catalyst Dynamics}
+When $\sigma = \Gamma$ (catalyst fully saturated), the adsorption dynamics switch off and the $\nox$ reduction is
+governed solely by the available inlet $\nox$ and the saturated catalyst capacity. Parametrizing:
+\begin{align}
+    f_{\Gamma}(k) &= \lrb{\frac{u_1(k)}{F(k)}} \phi_2^T(k)  \theta_{sat}
+    \label{eqn::gamma_scr}
+\end{align}
+where $\theta_{sat} = \Gamma \tau_0 k_{s2v} \theta_{scr}$ is the lumped saturated-model parameter vector.
+
+% --- Guard condition ---
+\subsubsection{Guard Condition}
+The switching condition between saturated and unsaturated modes can be expressed as a linear-in-parameters inequality.
+Normal (unsaturated) operation holds when:
+\begin{align}
+    \underbrace{\bm{ \bar \eta_F(k) \phi_1^T(k-1)
+                    & \pmb 0 & \pmb 0 & - \phi_2^T(k-1) }}_{\phi_g(k)^T}
+                    \theta_{NO_x} \leq 0
+    \label{eqn::guard_condition}
+\end{align}
+When this condition is violated, the dynamics switch to the saturated catalyst mode. This results in a
+\textit{self-excited threshold nonlinear autoregressive with exogenous input} (SETAR) model structure.
+
+% --- Min-max formulation ---
+\subsubsection{Min-Max Formulation}
+Combining both modes, the $\nox$ reduction dynamics can be written in min-max form:
+\begin{align}
+    \eta\lr{k + 1} &= \max \lrf{ 0, \min \lrf{f_{\sigma}(k), f_{\Gamma}(k)}}
+    \label{eqn::eta_max_min}
+\end{align}
+where $f_{\sigma}(k)$ represents the unsaturated dynamics (from equation~\ref{eqn::eta_compact}) and $f_{\Gamma}(k)$
+represents the saturated dynamics. The tailpipe $\nox$ concentration is then bounded by:
+\begin{align}
+    \max \lrf{0, u_1(k) - f_{\Gamma}(k)} \leq x_1(k+1) \leq u_1(k)
+    \label{eqn::nox_bounds}
+\end{align}
+
+% --- State diagram ---
+% \begin{figure}[!ht]
+%     \centering
+%     \includegraphics[width=\figWidth]{./figs/2-modeling/hybrid_model.png}
+%     \caption{State diagram for the $NO_x$ reduction model with switching conditions}
+%     \label{fig::no_x_switching}
+% \end{figure}
+
+% --- LP for θ_sat estimation ---
+\subsubsection{Saturated Model Parameter Estimation}
+The upper bound $f_\Gamma(k) \geq \eta(k+1)$ for all $k$ can be used to estimate $\theta_{sat}$ by solving the
+following constrained linear programming problem:
+\begin{align}
+    \text{Minimize:}& \qquad    \lrb{ \sum_{k = 0}^{N-2} \lrb{\frac{u_1(k)}{F(k)}} \phi_2^T(k) } \theta_{sat}
+        \notag \\
+    \text{Subject to:}& \qquad
+            \bm{\lrb{\frac{u_1(0)}{F(0)}} \phi_2^T(0) \\
+                \lrb{\frac{u_1(1)}{F(1)}} \phi_2^T(1) \\
+                \vdots \\
+                \lrb{\frac{u_1(N-2)}{F(N-2)}} \phi_2^T(N-2) \\
+            }
+            \theta_{sat}
+            \geq
+            \bm{\eta(1) \\
+                \eta(2)\\
+                \vdots \\
+                \eta(N-1)}
+    \label{eqn::optimization_prob}
+\end{align}
+This minimizes the area under the parametrized saturated dynamics curve subject to the constraint that it forms a tight
+upper bound on the observed $\nox$ reduction $\eta(k)$.

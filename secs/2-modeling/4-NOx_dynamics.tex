@@ -1,0 +1,36 @@
+% §2.4 — NOₓ Process Dynamics
+% Source: Thesis/secs/3-governing_eqns/3-NOx_proc_dyn.tex
+% ===========================================================
+\subsection{$\nox$ Process Dynamics \label{sec::nox_proc_dyn}}
+
+The $\nox$ process dynamics involve only the standard SCR reaction. The gaseous $\nox$ that enters the catalyst chamber
+reacts with the adsorbed ammonia on the surface forming $\nitrogen$ and $\water$ (Eley-Rideal mechanism). The volumetric rate
+of $\nox$ reduction is:
+\begin{align}
+    \dot{\con{\nox}}^{scr} &= -k_{s2v} k_{scr} \con{\ammonia}^{ads} \con{\nox}^{in}
+    \label{eqn::nox_rate}
+\end{align}
+
+% --- Molar conservation ---
+\subsubsection{Molar Conservation at the Residence-Time Scale}
+At the end of every residence time, a fresh parcel of gaseous reactants enters the catalyst chamber. The molar
+conservation for $\nox$ reduction relates the inlet and outlet concentrations across one residence time:
+\begin{align}
+    \con{\nox}^{out} (k + (i+1)\tau) &= \con{\nox}^{in} (k + i\tau) + \int_{0}^{\tau}
+        \dot{\con{\nox}}^{scr} (k + i\tau) \, dt
+    \label{eqn::nox_molar_cons}
+\end{align}
+Note that the outlet $\nox$ measurement depends only on the inlet $\nox$ one residence time earlier — there is no
+integrating effect of $\nox$ within the sample time. Introducing the zero-order hold approximation for the inlet $\nox$
+concentration and the average surface concentration:
+\begin{align*}
+    \con{\nox}^{in} (k + i \tau) &\approx \con{\nox}^{in} (k) \qquad \forall \, i < n \\
+    \con{\ammonia}^{ads} (k + i \tau) &\approx \sigma(k) \qquad \forall \, i < n
+\end{align*}
+we obtain the discrete $\nox$ process dynamics:
+\begin{align}
+    \con{\nox}^{out} (k + 1) &= \con{\nox}^{in} (k) \lr{1 - k_{s2v} k_{scr} \sigma(k) \tau}
+    \label{eqn::NOX_process}
+\end{align}
+This result shows that the $\nox$ outlet concentration is a static map of the inlet concentration, modulated by the
+average adsorbed ammonia $\sigma(k)$ and the residence time $\tau$.

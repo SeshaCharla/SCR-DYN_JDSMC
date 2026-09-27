@@ -7,7 +7,7 @@ result from incomplete fuel combustion, combustion of engine lubricating oils an
 while others are unavoidable byproducts of the combustion process. To mitigate these pollutants, an aftertreatment
 system is installed between the engine outlet and the tailpipe. The diesel engine aftertreatment system comprises
 several subsystems, each designed to target specific exhaust pollutants. The Selective Catalytic Reduction (SCR) and
-Ammonia Slip Catalysis (ASC) System catalytically reduces nitrogen oxides ($NO_x$) to nitrogen and water vapor. Both SCR
+Ammonia Slip Catalysis (ASC) System catalytically reduces nitrogen oxides ($\nox$) to nitrogen and water vapor. Both SCR
 and ASC are constructed as cylindrical bricks, with catalyst coated on the inner surfaces of hollow channels. These
 channels are densely arranged to form the brick structure. Multiple SCR catalyst bricks are stacked within a metal
 canister (Figure~\ref{fig::aftertreatment_system}), with the ASC brick positioned downstream. The placement and flow
@@ -20,39 +20,53 @@ distribution of these components are key design variables.
     \label{fig::aftertreatment_system}
 \end{figure}
 % ============================================================
-The primary function of the SCR system is to convert engine-out $NO_x$ into nitrogen and water using ammonia derived from
-urea dosing, which is adsorbed onto the catalyst. Regulation of this catalytic reduction process aims to minimize
+The primary function of the SCR system is to convert engine-out $\nox$ into nitrogen and water using ammonia derived
+from urea dosing, which is adsorbed onto the catalyst. Regulation of this catalytic reduction process aims to minimize
 ammonia slip in tailpipe exhaust by two approaches. The first approach employs feedback control, adjusting urea dosing
-based on $NO_x$ concentrations at the SCR inlet and tailpipe. The second approach utilizes Ammonia Slip Catalysis, which
-oxidizes excess ammonia at the end of the SCR bed (Figure~\ref{fig::exhaust_scheme}).
+based on $\nox$ concentrations at the SCR inlet and tailpipe. The second approach utilizes Ammonia Slip Catalysis, which
+oxidizes excess ammonia at the end of the SCR bed (Figure~\ref{fig::exhaust_scheme}). Thus, the overall SCR-ASC system involves a complex network of chemical reactions both on the SCR and ASC beds and in the chamber, including:
+% ============================================================
+\noindent
+\begin{minipage}{0.49\textwidth}
+    $\urea \, ^{(liquid)} \longrightarrow \urea^* + x \water$                       \hfill [Evaporation]                   \\
+    $\urea^* \longrightarrow  \hnco + \ammonia$                                     \hfill [Urea decomposition]            \\
+    $\hnco + \water \longrightarrow \ammonia + \cotwo$                              \hfill [Isocyanic acid hydrolysis]     \\
+    $\ammonia + \Theta_{free} \leftrightharpoons \ammonia(ads)$                     \hfill [Ammonia Adsorption/Desorption] \\
+    $4 \ammonia ^{ads} + 4 \nitrox + \oxygen \longrightarrow 4 \nitrogen + 6 \water$ \hfill [Standard SCR reaction]         \\
+    $2 \ammonia ^{ads} +  \nitrox + \notwo \longrightarrow 2 \nitrogen + 3 \water$   \hfill [Fast SCR reaction]             \\
+    $4 \ammonia ^{ads}+ 3\notwo \longrightarrow 3.5 \nitrogen + 6 \water$           \hfill [Slow SCR reaction]             \\
+    $4 \ammonia + 3 \oxygen \longrightarrow 2 \nitrogen + 6 \water$                 \hfill [AMOX with/without ASC]         \\
+    $2 \nitrox + \oxygen \longrightarrow 2 \notwo$                                  \hfill [NO oxidation]                  \\
+\end{minipage}
 % ============================================================
 \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=\figWidth]{./figs/1-intro/SCR-ASC_model.png}
-        \caption{Schematic of the SCR-ASC System}
-        \label{fig::exhaust_scheme}
+    \centering
+    \includegraphics[width=\figWidth]{./figs/1-intro/SCR-ASC_model.png}
+    \caption{Schematic of the SCR-ASC System}
+    \label{fig::exhaust_scheme}
 \end{figure}
 % ============================================================
-The $NO_x$ reduction capacity of the catalyst diminishes over time due to hydrothermal aging and the accumulation of
+
+The $\nox$ reduction capacity of the catalyst diminishes over time due to hydrothermal aging and the accumulation of
 contaminants, including excess urea, platinum, sulfur, and phosphorus \cite{matsumoto2016model}. While a robust
 urea-dosing controller may attempt to offset catalyst degradation
 \cite{chen2016estimation,herman2010diagnostic,hu2018failure} by increasing urea dosing, this strategy can accelerate
-aging and further elevate $NO_x$ and ammonia emissions. This has severe environmental and financial implications. Cummins
-Inc. had to recall 500,000 medium and heavy-duty trucks in 2018 due to faster SCR catalyst degradation, resulting in
-excessive $NO_x$ emissions \cite{jain2023model}. On-board diagnostics (OBD) of SCR catalyst aging under real-world
-conditions would help meet increasingly stringent regulations. Some real-world limitations include the unavailability of
-ammonia sensors, the unobservability of catalyst state, and $NO_x$ sensor cross-sensitivity to ammonia.
+aging and further elevate $\nox$ and $\ammonia$ emissions. This has severe environmental and financial implications.
+Cummins must frequently perform product recalls or delay scheduled maintenance due to inaccurate estimations leading to
+excessive $\nox$ emissions \cite{jain2023model}. On-board diagnostics (OBD) of SCR catalyst aging under real-world
+transient conditions is complex due to various factors, including the interdependence of internal states, the lack of
+ammonia sensors, the unobservability of catalyst state, and $\nox$ sensor cross-sensitivity to $\ammonia$.
 
 Catalyst aging occurs through several distinct mechanisms, each reducing the concentration of adsorption sites required
 for catalytic reduction. These mechanisms include:
 \begin{inparaenum}[(1)]
-\item {Hydrothermal Aging}: Exposure to heat and water vapor from the exhaust leads to irreversible structural and
+    \item {Hydrothermal Aging}: Exposure to heat and water vapor from the exhaust leads to irreversible structural and
     chemical changes on the catalyst surface, reducing ammonia storage capacity \cite{kim2007modeling};
-\item {Chemical Deposits}: Deposits of sulfur, phosphorus, and urea-related compounds obstruct active sites for ammonia
+    \item {Chemical Deposits}: Deposits of sulfur, phosphorus, and urea-related compounds obstruct active sites for ammonia
     adsorption, thereby decreasing storage capacity \cite{kim2007modeling};
-\item {Platinum Deposits}: Trace amounts of volatilized platinum from the diesel oxidation catalyst (DOC) can accumulate
+    \item {Platinum Deposits}: Trace amounts of volatilized platinum from the diesel oxidation catalyst (DOC) can accumulate
     on the front section of the SCR catalyst \cite{toops2010deactivation,jen2009detection}; and
-\item {Catalyst Formulation-Specific Aging} \cite{daya2018development,daya2020kinetic}: Examples include dealumination
+    \item {Catalyst Formulation-Specific Aging} \cite{daya2018development,daya2020kinetic}: Examples include dealumination
     in Fe-zeolite catalysts \cite{toops2010deactivation} and the sintering of anatase $TiO_2$ (higher surface area per
     mass) to rutile $TiO_2$ (lower surface area per mass) in titanium dioxide-based catalysts
     \cite{gieshoff2000improved}.
@@ -92,13 +106,10 @@ assumptions and subsequently linearized for feedback control design \cite{devara
 developed to estimate the states associated with catalyst storage \cite{ma2017observer,jain2020term}. A method for
 detecting catalyst aging by observing changes in the catalyst's maximum storage capacity, modelled as an exponential
 function of temperature, was also introduced in \cite{ma2017observer,jiang2019hydrothermal}. Additionally, an on-board
-diagnostics (OBD) approach for catalyst aging, utilizing tailpipe $NO_x$ and ammonia measurements, was proposed in
-\cite{matsumoto2016model}. This method is based on the hypothesis of reduced adsorption sites and has been demonstrated
-on real-world trucks.
-
-A persistent challenge in these studies is that system identification leads to a nonconvex, nonlinear parameter
-estimation problem. Moreover, many approaches assume the availability of all gaseous states at the tailpipe for state
-estimation and to mitigate cross-sensitivity effects in $NO_x$ sensors. This assumption is not valid in practical
+diagnostics (OBD) approach for catalyst aging, utilizing tailpipe $\nox$ and ammonia measurements, was proposed in
+\cite{jain2023diagnostics, jain2023model} using a greybox single continuous stirred-tank reactor (CSTR) model. The state
+and parameter estimators in that study assumed exact knowledge of urea injection values to isolate errors in parameter
+estimation and to mitigate cross-sensitivity effects in $\nox$ sensors. This assumption is not valid in practical
 applications, as tailpipe ammonia measurements are generally unavailable in commercial vehicles. Another notable
 limitation of the CSTR model, regarding sensor sampling, is that its discretization does not consider reactant residence
 time, which results in impractically high sampling frequencies. Furthermore, accurate discretization requires at least
@@ -123,13 +134,13 @@ reactions considered is reduced to the three dominant reactions,
     \item Ammonia Oxidation.
 \end{inparaenum}
 %==
-The analysis focuses exclusively on the standard SCR reaction, with the assumption that all $NO_x$ in the exhaust gas is
-$NO$, since commercially available $NO_x$ sensors cannot differentiate between $NO$ and $NO_2$ \cite{nova2014urea}. The
+The analysis focuses exclusively on the standard SCR reaction, with the assumption that all $\nox$ in the exhaust gas is
+$\nitrox$, since commercially available $\nox$ sensors cannot differentiate between $\nitrox$ and $\notwo$ \cite{nova2014urea}. The
 slow SCR reaction is omitted, as the exhaust flow rate ensures it does not significantly affect the concentration of
 tailpipe exhaust components. Mass transfer is neglected, indicating that the catalyst's chemical kinetics are reaction
 controlled because the standard SCR reaction rate exceeds the exhaust fluid flow rate. A $100\%$ nitrogen selectivity
 for ammonia oxidation is assumed for both SCR and ASC \cite{jain2023diagnostics}. Furthermore, the reaction rates are
-assumed to depend solely on the gas-phase concentrations of $NO_x$, $NH_3$, the adsorbed ammonia, and the available
+assumed to depend solely on the gas-phase concentrations of $\nox$, $\ammonia$, the adsorbed ammonia, and the available
 adsorption sites.
 % \begin{table}[!ht]
 %     \begin{center}
@@ -140,20 +151,20 @@ adsorption sites.
 %         Reaction & Reaction Equation & Reaction Rate \\ \hline
 %         % ====
 %         Standard SCR &
-%         $4 NH_3 ^{(ads)} + 4 NO + O_2 \longrightarrow 4 N_2 + 6 H_2O$ &
-%         $r_{scr} = k_{scr} \con{NO_x}^{out} \con{NH_3}^{ads}$ \\ \hline
+%         $4 \ammonia^{(ads)} + 4 \nitrox + \oxygen \longrightarrow 4 \nitrogen + 6 \water$ &
+%         $r_{scr} = k_{scr} \con{\nox}^{out} \con{\ammonia}^{ads}$ \\ \hline
 %         % =======
 %         AMOX &
-%         $4 NH_3 + 3 O_2 \longrightarrow 2 N_2 + 6 H_2O $ &
-%         $r_{ox} = k_{ox} \con{NH_3}^{out}$ \\ \hline
+%         $4 \ammonia + 3 \oxygen \longrightarrow 2 \nitrogen + 6 \water $ &
+%         $r_{ox} = k_{ox} \con{\ammonia}^{out}$ \\ \hline
 %         % =======
 %         Adsorption&
-%         $NH_3 + \theta_{free} \longrightarrow NH_3(ads)$ &
-%         $r_{ads} = k_{ads} \con{NH_3}^{out} \lr{\Gamma - \con{NH_3}^{ads}}$ \\ \hline
+%         $\ammonia + \theta_{free} \longrightarrow \ammonia(ads)$ &
+%         $r_{ads} = k_{ads} \con{\ammonia}^{out} \lr{\Gamma - \con{\ammonia}^{ads}}$ \\ \hline
 %         %=======
 %         Desorption &
-%         $NH_3 ^{(ads)} \longrightarrow NH_3 + \theta_{free}$ &
-%         $r_{des} = k_{des} \con{NH_3}^{ads}$ \\ \hline
+%         $\ammonia^{(ads)} \longrightarrow \ammonia + \theta_{free}$ &
+%         $r_{des} = k_{des} \con{\ammonia}^{ads}$ \\ \hline
 %     \end{tabular}
 %     \end{center}
 %     *$\Gamma$ is the total adsorption site concentration.
@@ -171,36 +182,36 @@ nonlinear model developed in this thesis.
 One additional consideration is the saturation of adsorption sites on the catalyst surface. The total concentration of
 adsorption sites, denoted as $\Gamma$, is the sum of occupied and free adsorption sites. Thus, at any given time,
 \begin{align}
-    \Gamma \geq \con{NH_3}^{ads} \geq 0
+    \Gamma \geq \con{\ammonia}^{ads} \geq 0
 \end{align}
 Thus, the system dynamics are conditioned on the saturation state of the catalyst. This phenomenon is captured in the
 model through the following switching function:
 \begin{align}
     g_{sat} \lr{\sigma} = \begin{cases}
-        \sigma & \text{if } 0 \leq \sigma \leq \Gamma \\
-        \Gamma & \text{if } \sigma > \Gamma \\
-        0 & \text{if } \sigma < 0
-    \end{cases}
+                              \sigma & \text{if } 0 \leq \sigma \leq \Gamma \\
+                              \Gamma & \text{if } \sigma > \Gamma           \\
+                              0      & \text{if } \sigma < 0
+                          \end{cases}
     \label{eqn::g_sat}
 \end{align}
 We have dynamics of the concentration of reactants from the mass balance for the CSTR \cite{hsieh2011development}:
 \begin{widetext}
-\begin{align}
-    \bm{
-        \dot{\con{NO_x}}^{out} \\
-        \dot{\con{NH_3}}^{out} \\        
-        \dot{\con{NH_3}}^{ads}        
-    } &= \bm{
-       \frac{F_{vol}}{V_{scr}} \lr{\con{NO_x}^{in}-\con{NO_x}^{out}} - k_{scr} \con{NO_x}^{out} g_{sat}\lr{\con{NH_3}^{ads}} \\ 
-       \frac{F_{vol}}{V_{scr}} \lr{\con{NH_3}^{in}-\con{NH_3}^{out}} - k_{ads} \con{NH_3}^{out} \lr{\Gamma - g_{sat}\lr{\con{NH_3}^{ads}}} + k_{des} g_{sat}\lr{{\con{NH_3}^{ads}}} \\
-       k_{ads} \con{NH_3}^{out} \lr{\Gamma - g_{sat}\lr{\con{NH_3}^{ads}}} - k_{des} g_{sat}\lr{{\con{NH_3}^{ads}}} - k_{scr} \con{NO_x}^{out} g_{sat}\lr{\con{NH_3}^{ads}}
-    } \label{eqn::cstr_mass_bal}
-\end{align}
+    \begin{align}
+        \bm{
+        \dot{\con{\nox}}^{out}                                                                                                                                                                           \\
+        \dot{\con{\ammonia}}^{out}                                                                                                                                                                       \\
+            \dot{\con{\ammonia}}^{ads}
+        } & = \bm{
+        \frac{F_{vol}}{V_{scr}} \lr{\con{\nox}^{in}-\con{\nox}^{out}} - k_{scr} \con{\nox}^{out} g_{sat}\lr{\con{\ammonia}^{ads}}                                                                        \\
+        \frac{F_{vol}}{V_{scr}} \lr{\con{\ammonia}^{in}-\con{\ammonia}^{out}} - k_{ads} \con{\ammonia}^{out} \lr{\Gamma - g_{sat}\lr{\con{\ammonia}^{ads}}} + k_{des} g_{sat}\lr{{\con{\ammonia}^{ads}}} \\
+            k_{ads} \con{\ammonia}^{out} \lr{\Gamma - g_{sat}\lr{\con{\ammonia}^{ads}}} - k_{des} g_{sat}\lr{{\con{\ammonia}^{ads}}} - k_{scr} \con{\nox}^{out} g_{sat}\lr{\con{\ammonia}^{ads}}
+        } \label{eqn::cstr_mass_bal}
+    \end{align}
 \end{widetext}
 The actual input to the system is urea (AdBlue ($32.5\%$ aqueous urea solution) \cite{nova2014urea})
 injection that is converted to ammonia. This can be modelled by the following equation~(\ref{eqn::cstr_urea_inj}).
 \begin{align}
-    \dot{\con{NH_3}}^{in} &= \frac{1}{\tau_{urea}} \lrf{ - \con{NH_3}^{in} +   \frac{b_{urea}}{F_{vol}}  u_{inj}}
+    \dot{\con{\ammonia}}^{in} & = \frac{1}{\tau_{urea}} \lrf{ - \con{\ammonia}^{in} +   \frac{b_{urea}}{F_{vol}}  u_{inj}}
     \label{eqn::cstr_urea_inj}
 \end{align}
 The equations~\ref{eqn::cstr_urea_inj}~and~\ref{eqn::cstr_mass_bal} constitute the nonlinear state-space model for the
@@ -214,7 +225,7 @@ as the time constant. For effective sampling of such a system, the sampling freq
 the inverse of the residence time. Let $\tau$ be the residence time of the reacting flow through the SCR-ASC system,
 then the sampling frequency $f_s = 1/t_s$ should be:
 \begin{align}
-    f_s &\geq \frac{n}{\tau}
+    f_s & \geq \frac{n}{\tau}
     \implies t_s \leq \frac{\tau}{n} \qquad n \geq 2
 \end{align}
 Thus, the CSTR model is valid only for high sampling frequencies. If we plot the residence time on the y-axis and the
@@ -224,20 +235,20 @@ applications, particularly regarding sampling frequency requirements. This insig
 alternative modelling approaches that can accommodate lower sampling frequencies while still accurately capturing the
 dynamics of the SCR-ASC system.
 
-The sensor limitations and identifiability requirements outlined in previous chapters necessitate the development of a
-dynamic model for the SCR-ASC system. This model must possess parameters that are identifiable from sensor data and
-exhibit dynamics within the frequency range captured by the sensors. Accordingly, the model's validity region in the
-$\tau-t_s$ (residence time versus sampling time) plane should encompass the decimated test-cell and truck data residence
-times (Figure~\ref{fig::mdl_validity}). $\tau-t_s$ plane is the plot of the mode of the residence time versus sampling
-time for a given test-cell or truck data. This representation indicates the similarity between data sets in terms of the
-frequency content of their captured dynamics. Therefore, this chapter proposes a discrete nonlinear state-space model
-for the SCR-ASC dynamics that alternates between catalyst saturation and unsaturation states.
+The sensor limitations and identifiability requirements outlined necessitate the development of a dynamic model for the
+SCR-ASC system. This model must possess parameters that are identifiable from sensor data and exhibit dynamics within
+the frequency range captured by the sensors. Accordingly, the model's validity region in the $\tau-t_s$ (residence time
+versus sampling time) plane should encompass the decimated test-cell and truck data residence times
+(Figure~\ref{fig::mdl_validity}). $\tau-t_s$ plane is the plot of the mode (central tendency measure) of the residence
+time versus sampling time for a given test-cell or truck data. This representation indicates the similarity between data
+sets in terms of the frequency content of their captured dynamics. Therefore, this chapter proposes a discrete nonlinear
+state-space model for the SCR-ASC dynamics that alternates between catalyst saturation and unsaturation states.
 
 \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=\figWidth]{./figs/1-intro/mdl_valid.png}
-        \caption{Validity region of the discrete nonlinear switched model for SCR-ASC dynamics}
-        \label{fig::mdl_validity}
+    \centering
+    \includegraphics[width=\figWidth]{./figs/1-intro/mdl_valid.png}
+    \caption{Validity region of the discrete nonlinear switched model for SCR-ASC dynamics}
+    \label{fig::mdl_validity}
 \end{figure}
 
 The model development employs a control volume approach, formulating molar conservation equations for the reacting

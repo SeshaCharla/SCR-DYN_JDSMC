@@ -1,0 +1,44 @@
+\subsection{Reactions and Rate Equations}
+
+The SCR-ASC system involves urea decomposition, ammonia adsorption/desorption, selective catalytic reduction of $\nox$,
+and ammonia oxidation (AMOX) on both SCR and ASC surfaces. For a tractable model, we retain only three dominant
+reactions: the standard SCR reaction (fast and slow SCR reactions are omitted, as the exhaust flow rate ensures they do
+not significantly affect tailpipe concentrations), the AMOX reactions on both SCR and ASC, lumped into a single
+oxidation reaction with $100\%$ $\nitrogen$ selectivity (valid for $T > 225\,°\text{C}$), and $\ammonia$
+adsorption and desorption on the catalyst surface. The Eley-Rideal mechanism is assumed for the reaction of gaseous $\nox$ with surface-adsorbed $\ammonia$.
+%===
+\begin{enumerate}
+    \item Standard SCR reaction:
+          \begin{align}
+              4 \ammonia^{ads} + 4 \nitrox + \oxygen & \xrightarrow[]{k_{scr}} 4 \nitrogen + 6 \water \label{react::std_scr}
+          \end{align}
+    \item Ammonia Oxidation:
+          \begin{align}
+              4 \ammonia^{ads} + 3 \oxygen & \xrightarrow[]{k_{oxi}} 2 \nitrogen + 6 \water \label{react::amox}
+          \end{align}
+    \item Ammonia Adsorption/Desorption:
+          \begin{align}
+              \ammonia + \Theta_{free} & \xrightleftharpoons[k_{des}]{k_{ads}} \ammonia^{ads}
+              \label{react::ads}
+          \end{align}
+\end{enumerate}
+%===
+The surface $\ammonia$ rate follows directly from these three reactions. Adsorption fills sites proportional to
+free-site concentration $(\Gamma - \con{\ammonia}^{ads})$, while desorption, SCR, and oxidation each consume adsorbed
+$\ammonia$:
+\begin{multline}
+    \dot{\con{\ammonia}}^{ads} = \underbrace{k_{ads}\,\con{\ammonia}^{in}\,\lr{\Gamma - \con{\ammonia}^{ads}}}_{\text{adsorption}} \\
+    - \underbrace{\lr{k_{des} + k_{scr}\,\con{\nox}^{in} + k_{oxi}}\,\con{\ammonia}^{ads}}_{\text{desorption + SCR + oxidation}}
+    \label{eqn::nh3_ads_rate}
+\end{multline}
+where $\Gamma$ and $\con{\ammonia}^{ads}$ are surface concentrations ($mol/m^2$), while the remaining quantities are
+volumetric concentrations ($mol/m^3$). The conversion between surface and volumetric domains is given by the
+surface-to-volume ratio $k_{s2v} = A_{scr}/V$ ($m^{-1}$). The volumetric $\nox$ consumption rate involves only the SCR
+reaction:
+\begin{align}
+    \dot{\con{\nox}}^{scr} &= -k_{s2v}\,k_{scr}\,\con{\ammonia}^{ads}\,\con{\nox}^{in}
+    \label{eqn::nox_rate}
+\end{align}
+These two rate equations are coupled through $\con{\ammonia}^{ads}$. The surface concentration drives $\nox$
+reduction but is itself unobservable from tailpipe measurements. Eliminating this hidden state and expressing the $\nox$
+dynamics purely in terms of measurable signals is the central objective of the derivation that follows.

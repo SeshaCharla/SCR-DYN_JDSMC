@@ -1,0 +1,90 @@
+% §2.2 — Physical Property Models
+% Sources: Thesis/secs/2-data/2-data_units.tex (density)
+%          Thesis/secs/2-data/1-res_time.tex (residence time)
+%          Thesis/secs/3-governing_eqns/1-reactions.tex (Arrhenius)
+%          Thesis/secs/4-NOx_mdl/1-subs/parametrization.tex (Chebyshev, A3–A6)
+%          Thesis/secs/3-governing_eqns/5-urea_dosing_proc_dyn.tex (urea dosing)
+% ===========================================================
+\subsection{Physical Property Models}
+The governing equations developed in this section are parametrized using approximate models for the physical properties
+of the system. These models bridge the gap between the first-principles rate equations and the identifiable parametric
+form presented in subsequent subsections.
+
+% --- §2.2.1 Exhaust Gas Density ---
+\subsubsection{Exhaust Gas Density}
+The density of the exhaust flow is approximated as the density of air at the exhaust temperature and ambient atmospheric
+pressure, using the ideal gas law:
+\begin{align}
+    \rho &= \frac{PM}{R T} = \frac{\mu}{T}
+    \label{eqn::density_model}
+\end{align}
+where $P = 101.325 \, kPa$ is the ambient pressure, $M = 28.97 \, g/mol$ is the mean molecular weight, and $R = 8.314
+\, J/(mol \cdot K)$ is the universal gas constant. At the typical operating temperature ($T_0 \approx 250 \lx{^o}{C}
+\approx 523 \, K$), a $\pm 100 \lx{^o}{C}$ variation yields less than $10\%$ change in density, which is negligible
+compared to the change in mass flow rate. Similarly, the sensitivity of density to $\nox$ concentration is negligible
+because the mole fraction of $\nox$ in exhaust is at the parts-per-million (ppm) level. Thus, density is assumed
+constant:
+\begin{align}
+    \rho &\approx \rho_0 = 1.2 \times 10^{-3} \, g/cm^3 \quad \text{at} \quad 250 \lx{^o}{C}
+    \label{eqn::const_density}
+\end{align}
+
+% --- §2.2.2 Residence Time ---
+\subsubsection{Residence Time Model}
+The residence time of the reacting flow through the SCR-ASC chamber is defined as:
+\begin{align}
+    \tau &= \frac{\rho V_{scr}}{F}
+    \label{eqn::res_time_def}
+\end{align}
+where $V_{scr}$ is the volume of the SCR-ASC chamber and $F$ is the mass flow rate. Using the constant-density
+assumption~(\ref{eqn::const_density}):
+\begin{align}
+    \tau(k) &= \frac{\rho_0 V_{scr}}{F(k)} = \frac{\tau_0}{F(k)}
+    \label{eqn::residence_time_mdl}
+\end{align}
+where $\tau_0 = \rho_0 V_{scr}$ is a constant. The mode of the residence time distribution for the available test-cell
+and truck data is approximately $0.07 \, s$, which is much shorter than the sampling intervals ($t_s^{test} = 0.2 \, s$,
+$t_s^{truck} = 1 \, s$). Thus, multiple residence times occur within each sampling period ($n = t_s / \tau \gg 1$),
+motivating the telescopic summation approach adopted in this work.
+
+% --- §2.2.3 Rate Constant Models (Arrhenius → Chebyshev) ---
+\subsubsection{Rate Constant Temperature Models}
+The rate constants of the reactions follow the Arrhenius equation:
+\begin{align}
+    k &= A \exp\left(-\frac{E}{RT}\right)
+\end{align}
+where $A$ is the pre-exponential factor and $E$ is the activation energy. Using Taylor series expansion about a nominal
+temperature $T_0$, the rate constant can be approximated as a polynomial in temperature:
+\begin{align}
+    k(T) &\approx mT + c     && \text{(linear, valid within } \pm 50 \lx{^o}{C}\text{)}
+        \label{eqn::k_linear} \\
+    k(T) &\approx qT^2 + mT + c && \text{(quadratic, wider range)}
+        \label{eqn::k_quadratic}
+\end{align}
+For numerical stability, the temperature range $[T_{min}, T_{max}]$ is mapped to $[-1, 1]$ and Chebyshev polynomial
+basis functions are used:
+\begin{align}
+    \phi_1 (k) &= \bm{ \frac{T-T_0}{T_r} & 1}
+    \label{eqn::phi_1} \\
+    \phi_2 (k) &= \bm{2\lr{\frac{T-T_0}{T_r}}^2-1 & \frac{T-T_0}{T_r} & 1}
+    \label{eqn::phi_2}
+\end{align}
+where $T_0 = (T_{max} + T_{min})/2$ and $T_r = (T_{max} - T_{min})/2$. The first-order basis $\phi_1$ is used for
+terms containing individual rate constants, which vary nearly linearly over the operating range. The second-order basis
+$\phi_2$ is used for terms containing products of rate constants and $\Gamma$ (e.g., $k_{scr} \cdot k_{ads} \cdot
+\Gamma$), where the combined temperature dependence includes an inflection point.
+
+% --- §2.2.4 Urea Dosing Model ---
+\subsubsection{Urea Dosing Model}
+The primary control input to the system is the injection of urea (commercially known as AdBlue, a $32.5\%$ aqueous urea solution). The aggregate decomposition reaction is:
+\begin{align*}
+    \urea \, (liquid) &\longrightarrow 2 \ammonia + \cotwo + x \water
+\end{align*}
+Since the concentration of urea in the aqueous solution is constant, the rate of ammonia production is directly proportional to the urea injection rate. The inlet volumetric concentration of ammonia is given by:
+\begin{align}
+    \con{\ammonia}^{in}(k) &= \nu_u \frac{u_{inj}(k)}{F(k)}
+    \label{eqn::urea_dosing}
+\end{align}
+where $\nu_u = 2 r_u t_s \rho_0$ is a lumped constant independent of temperature (since urea is preheated before
+injection), $u_{inj}$ is the urea injection rate, and $F$ is the exhaust mass flow rate. This reciprocal dependence on
+$F$ breaks down at zero flow rate, which is physically consistent.

@@ -1,1 +1,27 @@
-\section{The SCR-ASC System: Mathematical Modelling}
+\section{The SCR-ASC System: Mathematical Modelling and Parametrization}
+
+This section develops an identifiable mathematical model for the catalytic $\nox$ reduction dynamics in the SCR-ASC
+system. Constraints on sensor placement and sampling rates limit the available measurements to inlet and outlet $\nox$
+concentrations and urea dosing sampled at periods large relative to the residence time of the reacting flow. Rather than
+modelling the internal reacting-flow dynamics and then discretizing, we model the time evolution of these measurement
+signals directly, treating the SCR-ASC chamber as a control volume of known dimensions and accounting for the underlying
+reaction kinetics that generate the measurements. Because the discretization follows from the measurement process
+itself, the resulting model is natively discrete-time and directly usable for system identification, state estimation,
+fault detection, and control design. Assumptions, labeled $A_i$, are introduced and justified at the point of use
+throughout the derivation.
+
+% ===========================================================
+\input{./secs/2-modeling/1-reactions.tex}
+% ===========================================================
+% \input{./secs/2-modeling/2-physical_models.tex}
+% ===========================================================
+% \input{./secs/2-modeling/3-NH3ads_dynamics.tex}
+% ===========================================================
+% \input{./secs/2-modeling/4-NOx_dynamics.tex}
+% ===========================================================
+% \input{./secs/2-modeling/5-process_dynamics.tex}
+% ===========================================================
+% \input{./secs/2-modeling/6-NOx_IO_model.tex}
+% ===========================================================
+% \input{./secs/2-modeling/7-switched_model.tex}
+% ===========================================================
