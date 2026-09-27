@@ -1,0 +1,127 @@
+% SCR-ASC system schematic -- \input this inside a figure environment
+% Requires: \usepackage{tikz}
+%           \usetikzlibrary{arrows.meta, patterns, positioning, decorations.pathreplacing, calc}
+\begin{tikzpicture}[>=Stealth, thick,
+    lbl/.style={font=\normalsize},
+    blk/.style={draw, minimum height=1.2cm, minimum width=2.8cm, font=\normalsize, align=center},
+    arr/.style={->, line width=1.5pt}]
+
+% ====================================================================
+% TOP PART: Physical SCR-ASC chamber
+% ====================================================================
+\def\topY{6.5}
+
+% --- Main dashed box ---
+\draw[line width=2.5pt, dashed]
+    (-1, \topY-0.2) rectangle (11, \topY+5.2);
+
+% --- SCR section (hatched, left) ---
+\fill[pattern=north east lines, pattern color=gray!30]
+    (-0.6, \topY) rectangle (6.5, \topY+4.8);
+\draw[line width=1pt] (-0.6, \topY) rectangle (6.5, \topY+4.8);
+
+% --- Divider between SCR and ASC ---
+\draw[line width=2pt, dashed] (6.5, \topY-0.2) -- (6.5, \topY+5.2);
+
+% --- ASC section (hatched, right) ---
+\fill[pattern=north east lines, pattern color=gray!30]
+    (6.5, \topY) rectangle (10.6, \topY+4.8);
+\draw[line width=1pt] (6.5, \topY) rectangle (10.6, \topY+4.8);
+
+% --- SCR label ---
+\node[font=\large, align=center, fill=white, inner sep=4pt] at (3.0, \topY+2.4)
+    {$\text{NO}_\text{X}$ Reduction\\[2pt]\&\\[2pt]$\text{NH}_3$ Oxidation\\[2pt]on SCR Bed};
+
+% --- ASC label ---
+\node[font=\large, align=center, fill=white, inner sep=4pt] at (8.55, \topY+2.4)
+    {$\text{NH}_3$\\[2pt]Oxidation\\[2pt]on ASC};
+
+% --- Inlet arrows (left) ---
+\draw[arr] (-3.5, \topY+3.8) -- (-0.6, \topY+3.8);
+\node[lbl, anchor=south] at (-2.0, \topY+3.9) {$\{\text{NO}_x\}^{in}$};
+
+\draw[arr] (-3.5, \topY+1.0) -- (-0.6, \topY+1.0);
+\node[lbl, anchor=south] at (-2.0, \topY+1.1) {$\{\text{NH}_3\}^{in}$};
+
+% --- Outlet arrows (right) ---
+\draw[arr] (10.6, \topY+3.8) -- (14.0, \topY+3.8);
+\node[lbl, anchor=south] at (12.3, \topY+3.9) {$\{\text{NO}_x\}^{out}$};
+
+\draw[arr] (10.6, \topY+1.0) -- (14.0, \topY+1.0);
+\node[lbl, anchor=south] at (12.3, \topY+1.1) {$\{\text{NH}_3\}^{out}$};
+
+% --- Merge braces at outlet ---
+\draw[line width=1pt] (10.8, \topY+4.2) to[out=-10,in=90] (11.3, \topY+2.4)
+    to[out=-90,in=10] (10.8, \topY+0.6);
+
+% ====================================================================
+% Connection braces (top to bottom)
+% ====================================================================
+\draw[decorate, decoration={brace, amplitude=8pt, mirror}, line width=1pt]
+    (-0.6, \topY-0.4) -- (6.5, \topY-0.4);
+\draw[decorate, decoration={brace, amplitude=8pt, mirror}, line width=1pt]
+    (6.5, \topY-0.4) -- (10.6, \topY-0.4);
+
+% ====================================================================
+% BOTTOM PART: Signal/model schematic
+% ====================================================================
+\def\botY{0}
+
+% --- SCR Reactions box ---
+\draw[line width=1.2pt] (1.5, \botY) rectangle (6.5, \botY+3.0);
+\draw[line width=0.8pt] (1.5, \botY+1.8) -- (6.5, \botY+1.8);
+\node[font=\normalsize, align=center] at (4.0, \botY+2.3) {SCR Reactions};
+% NH3_ads box (bottom of SCR)
+\fill[gray!15] (1.5, \botY) rectangle (6.5, \botY+0.8);
+\draw[line width=1.2pt] (1.5, \botY) rectangle (6.5, \botY+0.8);
+\node[font=\normalsize] at (4.0, \botY+0.4) {$[\text{NH}_3^{ads}]$ $(x_3)$};
+
+% --- ASC Reactions box ---
+\draw[line width=1.2pt] (6.5, \botY) rectangle (10.6, \botY+3.0);
+\draw[line width=0.8pt] (6.5, \botY+1.8) -- (10.6, \botY+1.8);
+\node[font=\normalsize, align=center] at (8.55, \botY+2.3) {ASC Reactions};
+% NH3_ads box (bottom of ASC)
+\fill[gray!15] (6.5, \botY) rectangle (10.6, \botY+0.8);
+\draw[line width=1.2pt] (6.5, \botY) rectangle (10.6, \botY+0.8);
+\node[font=\normalsize] at (8.55, \botY+0.4) {$[\text{NH}_3^{ads}]$};
+
+% --- Divider ---
+\draw[line width=1.2pt] (6.5, \botY) -- (6.5, \botY+3.0);
+
+% --- Curved interaction arrows (gas <-> surface) in SCR ---
+\draw[->, gray!50, line width=1.2pt, rounded corners=8pt]
+    (2.5, \botY+2.3) -- (2.2, \botY+1.2) -- (2.8, \botY+0.9);
+\draw[->, gray!50, line width=1.2pt, rounded corners=8pt]
+    (3.5, \botY+0.9) -- (3.8, \botY+1.5) -- (3.2, \botY+2.0);
+\draw[->, gray!50, line width=1.2pt, rounded corners=8pt]
+    (5.0, \botY+2.3) -- (4.7, \botY+1.2) -- (5.3, \botY+0.9);
+\draw[->, gray!50, line width=1.2pt, rounded corners=8pt]
+    (5.8, \botY+0.9) -- (6.1, \botY+1.5) -- (5.5, \botY+2.0);
+
+% --- Curved interaction arrows in ASC ---
+\draw[->, gray!50, line width=1.2pt, rounded corners=8pt]
+    (7.8, \botY+2.3) -- (7.5, \botY+1.2) -- (8.1, \botY+0.9);
+\draw[->, gray!50, line width=1.2pt, rounded corners=8pt]
+    (8.8, \botY+0.9) -- (9.1, \botY+1.5) -- (8.5, \botY+2.0);
+
+% --- NOx inlet arrow (top-left) ---
+\draw[arr] (-1.5, \botY+2.5) -- (1.5, \botY+2.5);
+\node[lbl, anchor=south] at (0.0, \botY+2.6) {$[\text{NO}_x^{in}]$ $(u_1)$};
+
+% --- NH3 inlet arrow (mid-left, from hydrolysis) ---
+% Hydrolysis box
+\node[blk] (hyd) at (-2.5, \botY+1.0) {Hydrolysis};
+\draw[arr] (-5.0, \botY+1.0) -- (hyd.west);
+\node[lbl, anchor=south] at (-3.8, \botY+1.1) {Urea $(u_{inj})$};
+\draw[arr] (hyd.east) -- (1.5, \botY+1.0);
+\node[lbl, anchor=south] at (-0.2, \botY+1.1) {$[\text{NH}_3^{in}]$};
+
+% --- NOx outlet arrow (top-right) ---
+\draw[arr] (10.6, \botY+2.5) -- (13.5, \botY+2.5);
+\node[lbl, anchor=south] at (12.0, \botY+2.6) {$[\text{NO}_x^{out}]$ $(x_1)$};
+
+% --- NH3 outlet arrow (bottom-right) ---
+\draw[arr] (10.6, \botY+1.0) -- (13.5, \botY+1.0);
+\node[lbl, anchor=south] at (12.0, \botY+1.1) {$[\text{NH}_3^{out}]$ $(x_2)$};
+
+\end{tikzpicture}

@@ -1,0 +1,139 @@
+\subsection{Parametrization and Switched Model \label{sec::parametrization}}
+
+The switched $\eta$-dynamics~(\ref{eqn::eta_switched}) are exact but contain individual rate constants and ratio
+prefactors. This section parametrizes all three cases ($f_\sigma$, $\eta_{\sat}$, and $0$) to obtain an identifiable
+model that is linear in parameters.
+
+% --- Chebyshev basis ---
+\subsubsection{Temperature Model for Rate Constants}
+
+\itbf{$A_8$:} The rate constants vary polynomially with temperature over the operating range. This is justified by a
+Taylor expansion of the Arrhenius form $k = A\exp(-E/RT)$, which yields a polynomial in $T$ for small perturbations
+about a reference temperature.
+
+For numerical stability, the operating range $[T_{min}, T_{max}]$ is mapped to $[-1,1]$ using Chebyshev polynomials.
+Let $T_0 = (T_{max}+T_{min})/2$ and $T_r = (T_{max}-T_{min})/2$:
+\begin{align}
+    \phi_1 (k) &= \bm{ \frac{T-T_0}{T_r} & 1}
+    \label{eqn::phi_1} \\
+    \phi_2 (k) &= \bm{2\lr{\frac{T-T_0}{T_r}}^2-1 & \frac{T-T_0}{T_r} & 1}
+    \label{eqn::phi_2}
+\end{align}
+First-order $\phi_1$ is used for individual rate constants (nearly linear in $T$). Second-order $\phi_2$ is used for
+products of rate constants and $\Gamma$, which exhibit an inflection point.
+
+% --- Parametrize f_sigma ---
+\subsubsection{Unsaturated Dynamics: Flow-Scaled Parametric Form}
+
+\itbf{$A_9$:} Temperature changes slowly relative to the sampling period, i.e., $T(k) \approx T(k{-}1)$. This implies
+$k_{scr}(k)/k_{scr}(k{-}1) \approx 1$ and allows the product $k_{scr}(k)\, k_{ads}(k{-}1)$ to be treated as a single
+combined rate constant $k_{scr/ads}(k{-}1)$.
+
+\itbf{$A_{10}$:} Density changes with temperature are negligible, so $\tau(k) = \tau_0/F(k)$ and
+$\tau(k)/\tau(k{-}1) = F(k{-}1)/F(k)$.
+
+Applying $A_9$--$A_{10}$ to the unsaturated recursion~(\ref{eqn::f_sigma}), the ratio prefactor simplifies to
+$u_1(k)\, F(k{-}1) / [u_1(k{-}1)\, F(k)]$. To absorb this, define the \textit{flow-scaled $\nox$ reduction}:
+\begin{align}
+    \bar \eta_F (k) = \frac{F(k{-}1)}{u_1(k{-}1)} \eta(k)
+    \label{eqn::eta_bar_def}
+\end{align}
+Multiplying~(\ref{eqn::f_sigma}) by $F(k)/u_1(k)$ converts $\eta \to \bar\eta_F$ on both sides (the ratio prefactor
+becomes unity).
+
+\itbf{$A_{11}$:} The inlet $\ammonia$ concentration follows the urea dosing
+model~(\ref{eqn::urea_dosing}): $\con{\ammonia}^{in}(k) = \nu_u\, u_2(k)/F(k)$.
+
+\itbf{$A_{12}$:} The total surface site concentration $\Gamma$ is constant over the operating range (it changes only
+with aging).
+
+Expanding $\gamma_{proc}$~(\ref{eqn::gamma_proc}), substituting $A_{11}$--$A_{12}$, and replacing each rate constant
+with its Chebyshev basis ($k_{ads} = \phi_1^T\theta_{ads}$, $k_{od} = \phi_1^T\theta_{od}$,
+$k_{scr} = \phi_1^T\theta_{scr}$, $k_{scr/ads}\,\Gamma = \phi_2^T\theta_{scr/ads}$):
+\begin{align}
+    \bar \eta_F (k{+}1) = \bar \eta_F (k) &+ u_{2F}(k{-}1)\,\phi_2(k{-}1)\, \theta_\Gamma
+        \notag\\
+    &- u_{2F}(k{-}1)\, \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{ads}}
+        \notag\\
+    &- \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{od}}
+        \notag\\
+    &- u_1(k{-}1)\, \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{scr}}
+    \label{eqn::eta_bar_dynamics}
+\end{align}
+where $u_{2F}(k) = u_2(k)/F(k)$, and the four parameter groups are:
+\begin{inparaenum}[(1)]
+    \item $\theta_\Gamma = t_s\, k_{s2v}\, \nu_u\, \Gamma\, \tau_0\, \theta_{scr/ads}$:
+        adsorption onto free sites;
+    \item $\theta_{\eta_{ads}} = t_s\, \nu_u\, \theta_{ads}$:
+        site-blocking by adsorbed $\ammonia$;
+    \item $\theta_{\eta_{od}} = t_s\, \theta_{od}$:
+        oxidation and desorption loss; and
+    \item $\theta_{\eta_{scr}} = t_s\, \theta_{scr}$:
+        SCR consumption of adsorbed $\ammonia$.
+\end{inparaenum}
+
+% --- Identifiable compact form ---
+The model can be written compactly as:
+\begin{align}
+    \bar \eta_F (k{+}1) &= \bar \eta_F (k) + \phi_{\nox}^T(k)\, \theta_{\nox}
+    \label{eqn::eta_compact}
+\end{align}
+where $\phi_{\nox}(k)$ is the regressor vector (depending only on measured quantities) and
+$\theta_{\nox} = \lrb{\theta_{\eta_{ads}}^T \; \theta_{\eta_{od}}^T \; \theta_{\eta_{scr}}^T \;
+\theta_\Gamma^T}^T$.
+
+% --- Parametrize eta_sat ---
+\subsubsection{Saturated Ceiling}
+
+When $\sigma = \Gamma$, the $\nox$ reduction is $\eta_{\sat}(k) = \tau(k)\, k_{s2v}\, k_{scr}(k)\, u_1(k)\, \Gamma$.
+Converting to $\bar\eta_F$ space (multiply by $F(k)/u_1(k)$) and parametrizing $k_{scr}\,\Gamma$ with $\phi_2$
+(quadratic, because $k_{scr} \times \Gamma$ has a non-monotone temperature dependence):
+\begin{align}
+    \bar\eta_{F,\sat}(k) &= \phi_2^T(k)\, \theta_{\sat}
+    \label{eqn::eta_sat}
+\end{align}
+where $\theta_{\sat} = \Gamma\, \tau_0\, k_{s2v}\, \theta_{scr}$ is a separate parameter vector (not shared with the
+unsaturated dynamics).
+
+% --- Switched model ---
+\subsubsection{Switched Model}
+
+Combining the parametrized unsaturated dynamics~(\ref{eqn::eta_bar_dynamics}) with the saturation
+bounds~(\ref{eqn::eta_bounds}) in $\bar\eta_F$ space:
+\begin{align}
+    \bar\eta_F(k{+}1) = \begin{cases}
+        \bar\eta_F(k) + \phi_{\nox}^T(k)\, \theta_{\nox}
+            & \text{if } 0 \leq (\ref{eqn::eta_bar_dynamics}) \leq \bar\eta_{F,\sat}(k) \\[4pt]
+        \phi_2^T(k)\, \theta_{\sat}
+            & \text{if } (\ref{eqn::eta_bar_dynamics}) > \bar\eta_{F,\sat}(k) \\[4pt]
+        0
+            & \text{if } (\ref{eqn::eta_bar_dynamics}) < 0
+    \end{cases}
+    \label{eqn::switched_model}
+\end{align}
+
+% --- Guard condition ---
+\subsubsection{Guard Condition}
+
+The catalyst remains unsaturated when the net adsorption onto free sites is non-negative. In~(\ref{eqn::eta_bar_dynamics}), the adsorption-related terms are
+$u_{2F}\,\phi_2\,\theta_\Gamma - u_{2F}\,\bar\eta_F\,\phi_1\,\theta_{\eta_{ads}}$. Setting this $\geq 0$ and
+rearranging into a single inner product:
+\begin{align}
+    \underbrace{\bm{ \bar \eta_F(k)\, \phi_1^T(k{-}1)
+                    & \pmb 0 & \pmb 0 & - \phi_2^T(k{-}1) }}_{\phi_g(k)^T}
+                    \theta_{\nox} \leq 0
+    \label{eqn::guard_condition}
+\end{align}
+When this condition is violated, the dynamics switch to saturated mode. This guard condition is linear in the model
+parameters and can be evaluated from the current state and inputs without knowledge of $\sigma$. The threshold depends
+on the state $\bar\eta_F(k)$ itself, making the model a \textit{self-excited threshold nonlinear autoregressive with
+exogenous input} (SETNARX) structure.
+
+% --- Tailpipe NOx ---
+\subsubsection{Tailpipe $\nox$}
+
+Converting back from $\bar\eta_F$:
+\begin{align}
+    \eta(k{+}1) &= \bar\eta_F(k{+}1)\, \frac{u_1(k)}{F(k)} \label{eqn::eta_to_nox}\\
+    x_1(k{+}1)  &= u_1(k) - \eta(k{+}1) \label{eqn::tailpipe_nox}
+\end{align}

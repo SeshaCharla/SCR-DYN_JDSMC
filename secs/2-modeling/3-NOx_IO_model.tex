@@ -1,0 +1,65 @@
+\subsection{$\nox$ Reduction Model: Eliminating the Unobservable $\sigma$ \label{sec::nox_io_model}}
+
+The internal state $\sigma(k)$ is not directly measurable. To obtain an identifiable input-output model, $\sigma$ is
+eliminated using the $\nox$ output equation~(\ref{eqn::nox_output}). Define the \textit{$\nox$ reduction per sample}:
+\begin{align}
+    \eta(k) &= u_1(k{-}1) - x_1(k)
+    \label{eqn::eta_def}
+\end{align}
+where $u_1(k) = \con{\nox}^{in}(k)$ and $x_1(k) = \con{\nox}^{out}(k)$. From~(\ref{eqn::nox_output}):
+\begin{align}
+    \eta(k{+}1) &= \tau(k)\, k_{s2v}\, k_{scr}(k)\, u_1(k)\, \sigma(k)
+\end{align}
+Hence the average surface concentration can be expressed as:
+\begin{align}
+    \sigma(k) &= \frac{\eta(k{+}1)}{\tau(k)\, k_{s2v}\, k_{scr}(k)\, u_1(k)}
+    \label{eqn::sigma_elim}
+\end{align}
+
+% --- Unsaturated recursion ---
+\subsubsection{Unsaturated $\eta$-Dynamics}
+Rewrite the unbounded surface dynamics~(\ref{eqn::sigma_dynamics}) compactly as:
+\begin{align}
+    \sigma(k) &= \sigma(k{-}1)\,\gamma_{proc}(k{-}1) + \Gamma\, t_s\, k_{ads}(k{-}1)\, \con{\ammonia}^{in}(k{-}1)
+    \label{eqn::sigma_compact}
+\end{align}
+where
+\begin{align}
+    \gamma_{proc}(k) &= 1 - t_s\lr{k_{ads}(k)\,\con{\ammonia}^{in}(k) + k_{scr}(k)\,u_1(k) + k_{od}(k)}
+    \label{eqn::gamma_proc}
+\end{align}
+collects all terms that act on the current surface state. Substituting~(\ref{eqn::sigma_elim}) at times $k$ and
+$k{-}1$ into~(\ref{eqn::sigma_compact}) eliminates $\sigma$ entirely:
+\begin{align}
+    f_\sigma(k) =& \;\eta(k) \lrb{\frac{\tau(k)}{\tau(k{-}1)}}
+                            \lrb{\frac{u_1(k)}{u_1(k{-}1)}}
+                            \lrb{\frac{k_{scr}(k)}{k_{scr}(k{-}1)}}
+                            \gamma_{proc}(k{-}1) \notag \\
+        &+ t_s\, k_{s2v}\, \Gamma\, \tau(k)\, u_1(k)\, \con{\ammonia}^{in}(k{-}1)\,
+            k_{scr}(k)\, k_{ads}(k{-}1)
+    \label{eqn::f_sigma}
+\end{align}
+This is the unsaturated $\eta$-recursion, expressed entirely in terms of $\eta$ (observable) and the measurable inputs
+$u_1$, $u_2$, $F$, and $T$.
+
+% --- Switching in η space ---
+\subsubsection{Switched Dynamics in $\eta$ Space}
+Since $\sigma \propto \eta$ via~(\ref{eqn::sigma_elim}) with a positive proportionality constant, the physical
+constraint $0 \leq \sigma \leq \Gamma$ from~(\ref{eqn::g_sat}) maps directly to bounds on $\eta$:
+\begin{align}
+    0 \;\leq\; \eta(k{+}1) \;\leq\;
+        \underbrace{\tau(k)\, k_{s2v}\, k_{scr}(k)\, u_1(k)\, \Gamma}_{\eta_{\sat}(k)}
+    \label{eqn::eta_bounds}
+\end{align}
+where $\eta_{\sat}(k)$ is the $\nox$ reduction when the catalyst is fully saturated ($\sigma = \Gamma$). The switched
+dynamics are:
+\begin{align}
+    \eta(k{+}1) = \begin{cases}
+        f_\sigma(k)       & \text{if } 0 \leq f_\sigma(k) \leq \eta_{\sat}(k) \\[4pt]
+        \eta_{\sat}(k)    & \text{if } f_\sigma(k) > \eta_{\sat}(k) \\[4pt]
+        0                 & \text{if } f_\sigma(k) < 0
+    \end{cases}
+    \label{eqn::eta_switched}
+\end{align}
+The switching is entirely in terms of $\eta$ and the measurable inputs ($u_1$, $F$, $T$), with no dependence on the
+unobservable $\sigma$.

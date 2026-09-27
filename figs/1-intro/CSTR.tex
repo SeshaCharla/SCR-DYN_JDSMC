@@ -1,0 +1,49 @@
+% CSTR schematic -- \input this inside a figure environment
+% Requires: \usepackage{tikz}, \usetikzlibrary{arrows.meta, patterns}
+\begin{tikzpicture}[>=Stealth,
+    lbl/.style={font=\large}]
+
+% --- Tank dimensions ---
+\def\tw{2.5}   % tank half-width
+\def\th{5.5}   % tank height
+\def\ey{0.35}  % ellipse y-radius
+
+% --- Tank body ---
+\draw[line width=1.4pt, fill=white]
+    (-\tw, 0) -- (-\tw, \th) arc(180:360:{\tw} and {\ey}) -- (\tw, 0) arc(0:-180:{\tw} and {\ey});
+% Top ellipse
+\draw[line width=1.4pt, fill=white] (0, \th) ellipse ({\tw} and {\ey});
+% Bottom ellipse back half (dashed)
+\draw[line width=1.4pt] (\tw, 0) arc(0:-180:{\tw} and {\ey});
+\draw[line width=0.7pt, dashed] (\tw, 0) arc(0:180:{\tw} and {\ey});
+
+% --- Catalyst surface (hatched strip inside, near bottom) ---
+\fill[pattern=north east lines, pattern color=gray!50]
+    (-1.9, 0.65) rectangle (1.9, 0.95);
+\draw[gray!60] (-1.9, 0.65) rectangle (1.9, 0.95);
+\node[font=\footnotesize, gray!50!black, anchor=south] at (0, 1.0) {catalyst surface $(\Gamma)$};
+
+% --- Stirrer ---
+\def\sy{2.2}
+% Shaft
+\draw[line width=1.5pt] (0, \sy+0.5) -- (0, \th+\ey);
+% Blades
+\draw[line width=2pt] (-0.6, \sy+0.2) -- (0.6, \sy-0.2);
+\draw[line width=2pt] (-0.6, \sy-0.2) -- (0.6, \sy+0.2);
+% Hub
+\fill[white] (0, \sy) circle (0.09);
+\draw[line width=1.2pt] (0, \sy) circle (0.09);
+
+% --- Internal labels (offset right of shaft, upper portion) ---
+\node[lbl, anchor=west] at (0.25, 4.2) {$F,\; T,\; [\text{NO}_x]^{out},\; [\text{NH}_3]^{out}$};
+\node[lbl, fill=gray!8, rounded corners=2pt, inner sep=3pt, anchor=west] at (0.25, 3.4) {$[\text{NH}_3]^{ads}$};
+
+% --- Inlet (horizontal arrow into left wall, upper region) ---
+\draw[->, line width=2pt] (-6.2, 4.5) -- (-\tw-0.05, 4.5);
+\node[lbl, anchor=south west] at (-6.2, 4.6) {$F,\; T,\; [\text{NO}_x]^{in},\; [\text{NH}_3]^{in}$};
+
+% --- Outlet (horizontal arrow from right wall, lower region) ---
+\draw[->, line width=2pt] (\tw+0.05, 1.7) -- (6.2, 1.7);
+\node[lbl, anchor=south west] at (\tw+0.15, 1.8) {$F,\; T,\; [\text{NO}_x]^{out},\; [\text{NH}_3]^{out}$};
+
+\end{tikzpicture}

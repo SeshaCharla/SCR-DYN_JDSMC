@@ -1,90 +1,98 @@
-% §2.2 — Physical Property Models
-% Sources: Thesis/secs/2-data/2-data_units.tex (density)
-%          Thesis/secs/2-data/1-res_time.tex (residence time)
-%          Thesis/secs/3-governing_eqns/1-reactions.tex (Arrhenius)
-%          Thesis/secs/4-NOx_mdl/1-subs/parametrization.tex (Chebyshev, A3–A6)
-%          Thesis/secs/3-governing_eqns/5-urea_dosing_proc_dyn.tex (urea dosing)
-% ===========================================================
-\subsection{Physical Property Models}
-The governing equations developed in this section are parametrized using approximate models for the physical properties
-of the system. These models bridge the gap between the first-principles rate equations and the identifiable parametric
-form presented in subsequent subsections.
+\subsection{Discrete Nonlinear Dynamics}
 
-% --- §2.2.1 Exhaust Gas Density ---
-\subsubsection{Exhaust Gas Density}
-The density of the exhaust flow is approximated as the density of air at the exhaust temperature and ambient atmospheric
-pressure, using the ideal gas law:
+The system is modelled as a discrete plug-flow system. Within each sampling period $t_s$, there are $n$ residence
+times. At each residence time, a fresh parcel of exhaust gas enters and reacts with the catalyst surface. We now
+discretize each governing equation by tracking what happens across these $n$ sub-steps.
+
+\subsubsection{Surface $\ammonia$ Dynamics}
+We first derive the unbounded surface dynamics assuming no saturation constraints, then introduce the switching function
+that enforces the physical bounds $0 \leq \sigma \leq \Gamma$.
+
+At each sub-step (residence time) $i$, molar conservation on the catalyst surface gives:
 \begin{align}
-    \rho &= \frac{PM}{R T} = \frac{\mu}{T}
-    \label{eqn::density_model}
+    \con{\ammonia}^{ads}(k{+}(i{+}1)\tau) = \con{\ammonia}^{ads}(k{+}i\tau)
+        + \tau\,\dot{\con{\ammonia}}^{ads}(k{+}i\tau)
 \end{align}
-where $P = 101.325 \, kPa$ is the ambient pressure, $M = 28.97 \, g/mol$ is the mean molecular weight, and $R = 8.314
-\, J/(mol \cdot K)$ is the universal gas constant. At the typical operating temperature ($T_0 \approx 250 \lx{^o}{C}
-\approx 523 \, K$), a $\pm 100 \lx{^o}{C}$ variation yields less than $10\%$ change in density, which is negligible
-compared to the change in mass flow rate. Similarly, the sensitivity of density to $\nox$ concentration is negligible
-because the mole fraction of $\nox$ in exhaust is at the parts-per-million (ppm) level. Thus, density is assumed
-constant:
+where the rate is treated as constant within each residence time. The gaseous inputs
+($\con{\ammonia}^{in}$, $\con{\nox}^{in}$) are held constant (ZOH) across the entire sample, so only the surface
+concentration changes sub-step to sub-step. Summing telescopically from $i = 0$ to $n{-}1$ (all intermediate terms
+cancel):
+\begin{multline}
+    \con{\ammonia}^{ads}(k{+}1) - \con{\ammonia}^{ads}(k) = \\
+    \tau \sum_{i=0}^{n-1} \lr{\Gamma\,\gamma_{ads}(k) - \con{\ammonia}^{ads}(k{+}i\tau)\,\gamma_{des}(k)}
+\end{multline}
+where $\gamma_{ads} = k_{ads}\,\con{\ammonia}^{in}$ and
+$\gamma_{des} = k_{ads}\,\con{\ammonia}^{in} + k_{des} + k_{scr}\,\con{\nox}^{in} + k_{oxi}$.
+
+The sum over the unknown sub-step values $\con{\ammonia}^{ads}(k{+}i\tau)$ defines the \textit{average surface
+concentration} within the sample:
 \begin{align}
-    \rho &\approx \rho_0 = 1.2 \times 10^{-3} \, g/cm^3 \quad \text{at} \quad 250 \lx{^o}{C}
-    \label{eqn::const_density}
+    \sigma(k) = \frac{1}{n}\sum_{i=0}^{n-1}\con{\ammonia}^{ads}(k + i\tau)
+\end{align}
+This $\sigma(k)$ is unobservable. We cannot measure the surface concentration at each sub-step.
+
+\itbf{$A_7$:} Zero-order hold for the average surface concentration: $\sigma(k) \approx \con{\ammonia}^{ads}(k)$,
+i.e., the surface concentration at the start of the sample dominates the average. Using $n\tau = t_s$:
+\begin{multline}
+    \sigma^{ub}(k{+}1) = \sigma(k) + t_s\,k_{ads}\,\con{\ammonia}^{in}(k)\lr{\Gamma - \sigma(k)} \\
+        - t_s\,k_{od}\,\sigma(k) - t_s\,k_{scr}\,u_1(k)\,\sigma(k)
+    \label{eqn::sigma_dynamics}
+\end{multline}
+Equation~(\ref{eqn::sigma_dynamics}) assumes the catalyst remains unsaturated. In practice, the surface can saturate
+($\sigma = \Gamma$) or deplete ($\sigma = 0$). This is enforced by a switching function applied to the unbounded update
+$\sigma^{ub}$:
+\begin{align}
+    g_{\sat}(\sigma) &= \begin{cases}
+        \sigma  & \text{if } 0 \leq \sigma \leq \Gamma \\
+        \Gamma  & \text{if } \sigma > \Gamma \\
+        0       & \text{if } \sigma < 0
+    \end{cases}
+    \label{eqn::g_sat} \\
+    \sigma(k) &= g_{\sat}\lr{\sigma^{ub}(k)}
+    \label{eqn::sigma_switched}
 \end{align}
 
-% --- §2.2.2 Residence Time ---
-\subsubsection{Residence Time Model}
-The residence time of the reacting flow through the SCR-ASC chamber is defined as:
-\begin{align}
-    \tau &= \frac{\rho V_{scr}}{F}
-    \label{eqn::res_time_def}
-\end{align}
-where $V_{scr}$ is the volume of the SCR-ASC chamber and $F$ is the mass flow rate. Using the constant-density
-assumption~(\ref{eqn::const_density}):
-\begin{align}
-    \tau(k) &= \frac{\rho_0 V_{scr}}{F(k)} = \frac{\tau_0}{F(k)}
-    \label{eqn::residence_time_mdl}
-\end{align}
-where $\tau_0 = \rho_0 V_{scr}$ is a constant. The mode of the residence time distribution for the available test-cell
-and truck data is approximately $0.07 \, s$, which is much shorter than the sampling intervals ($t_s^{test} = 0.2 \, s$,
-$t_s^{truck} = 1 \, s$). Thus, multiple residence times occur within each sampling period ($n = t_s / \tau \gg 1$),
-motivating the telescopic summation approach adopted in this work.
+\subsubsection{$\nox$ Output}
 
-% --- §2.2.3 Rate Constant Models (Arrhenius → Chebyshev) ---
-\subsubsection{Rate Constant Temperature Models}
-The rate constants of the reactions follow the Arrhenius equation:
+Unlike adsorbed $\ammonia$, $\nox$ has no storage on the surface. The outlet concentration at each residence time
+depends only on the inlet concentration and the surface state during that sub-step:
+\begin{multline}
+    \con{\nox}^{out}(k{+}(i{+}1)\tau) = \con{\nox}^{in}(k{+}i\tau) \\
+        - \tau\,k_{s2v}\,k_{scr}\,\con{\ammonia}^{ads}(k{+}i\tau)\,\con{\nox}^{in}(k{+}i\tau)
+\end{multline}
+There is no telescopic accumulation. The measured outlet $\nox$ corresponds to the last residence time ($i = n{-}1$).
+Applying ZOH for inlet $\nox$ ($u_1(k)$) and the same surface approximation ($\sigma(k)$):
 \begin{align}
-    k &= A \exp\left(-\frac{E}{RT}\right)
+    x_1(k{+}1) = u_1(k)\lr{1 - \tau\,k_{s2v}\,k_{scr}\,\sigma(k)}
+    \label{eqn::nox_output}
 \end{align}
-where $A$ is the pre-exponential factor and $E$ is the activation energy. Using Taylor series expansion about a nominal
-temperature $T_0$, the rate constant can be approximated as a polynomial in temperature:
-\begin{align}
-    k(T) &\approx mT + c     && \text{(linear, valid within } \pm 50 \lx{^o}{C}\text{)}
-        \label{eqn::k_linear} \\
-    k(T) &\approx qT^2 + mT + c && \text{(quadratic, wider range)}
-        \label{eqn::k_quadratic}
-\end{align}
-For numerical stability, the temperature range $[T_{min}, T_{max}]$ is mapped to $[-1, 1]$ and Chebyshev polynomial
-basis functions are used:
-\begin{align}
-    \phi_1 (k) &= \bm{ \frac{T-T_0}{T_r} & 1}
-    \label{eqn::phi_1} \\
-    \phi_2 (k) &= \bm{2\lr{\frac{T-T_0}{T_r}}^2-1 & \frac{T-T_0}{T_r} & 1}
-    \label{eqn::phi_2}
-\end{align}
-where $T_0 = (T_{max} + T_{min})/2$ and $T_r = (T_{max} - T_{min})/2$. The first-order basis $\phi_1$ is used for
-terms containing individual rate constants, which vary nearly linearly over the operating range. The second-order basis
-$\phi_2$ is used for terms containing products of rate constants and $\Gamma$ (e.g., $k_{scr} \cdot k_{ads} \cdot
-\Gamma$), where the combined temperature dependence includes an inflection point.
 
-% --- §2.2.4 Urea Dosing Model ---
-\subsubsection{Urea Dosing Model}
-The primary control input to the system is the injection of urea (commercially known as AdBlue, a $32.5\%$ aqueous urea solution). The aggregate decomposition reaction is:
+\subsubsection{Urea Dosing}
+
+The injected urea solution (AdBlue) undergoes evaporation, thermal decomposition, and isocyanic acid hydrolysis. These
+three steps aggregate to:
 \begin{align*}
-    \urea \, (liquid) &\longrightarrow 2 \ammonia + \cotwo + x \water
+    \urea \longrightarrow 2\,\ammonia + \cotwo + x\,\water
 \end{align*}
-Since the concentration of urea in the aqueous solution is constant, the rate of ammonia production is directly proportional to the urea injection rate. The inlet volumetric concentration of ammonia is given by:
+Since the urea concentration in AdBlue is fixed, the decomposition rate $r_u = k_u \con{\urea}$ is a constant. It
+depends only on the volume of solution injected, not on temperature (the injector preheats the solution). The total
+moles of $\ammonia$ produced in one sampling period from injected volume $t_s\,u_2(k)$:
 \begin{align}
-    \con{\ammonia}^{in}(k) &= \nu_u \frac{u_{inj}(k)}{F(k)}
+    \mol{\ammonia}^{in}(k) = \underbrace{2\,r_u}_{\text{rate}}
+        \times \underbrace{t_s\,u_2(k)}_{\text{volume injected}}
+        \times \underbrace{t_s}_{\text{duration}}
+\end{align}
+These moles are distributed evenly over the $n$ residence times. Dividing by the chamber volume $V$ and substituting
+$n = t_s/\tau$:
+\begin{align}
+    \con{\ammonia}^{in}(k) = \frac{\mol{\ammonia}^{in}(k)}{nV}
+        = \frac{2\,r_u\,t_s\,\tau}{V}\;u_2(k)
+\end{align}
+Substituting $\tau = V\rho_0/F(k)$ and defining $\nu_u = 2\,r_u\,t_s\,\rho_0$:
+\begin{align}
+    \con{\ammonia}^{in}(k) = \nu_u\,\frac{u_2(k)}{F(k)}
     \label{eqn::urea_dosing}
 \end{align}
-where $\nu_u = 2 r_u t_s \rho_0$ is a lumped constant independent of temperature (since urea is preheated before
-injection), $u_{inj}$ is the urea injection rate, and $F$ is the exhaust mass flow rate. This reciprocal dependence on
-$F$ breaks down at zero flow rate, which is physically consistent.
+The inlet $\ammonia$ concentration is inversely proportional to flow. At lower flow, the same injection rate produces a
+higher concentration in the chamber. This reciprocal relationship breaks down at zero flow, which is physically
+meaningful (no exhaust to carry the reactant).

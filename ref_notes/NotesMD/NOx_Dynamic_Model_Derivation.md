@@ -53,6 +53,8 @@ The reactor is modelled as a discrete plug-flow system. Within each sampling per
 
 ### 2a. Surface NH$_3$ dynamics
 
+We first derive the unbounded surface dynamics assuming no saturation constraints, then introduce the switching function that enforces the physical bounds $0 \le \sigma \le \Gamma$.
+
 At each sub-step $i$, molar conservation on the catalyst surface gives:
 
 $$
@@ -76,7 +78,13 @@ $$
 This $\sigma(k)$ is unobservable — we cannot measure the surface concentration at each sub-step. **Approximation (ZOH):** treat $\sigma(k) \approx [\text{NH}_3]^{ads}(k)$, i.e., the surface concentration at the start of the sample dominates the average. Using $n\tau = t_s$:
 
 $$
-\sigma(k{+}1) = \sigma(k) + t_s\,k_{ads}\,[\text{NH}_3]^{in}(k)\bigl(\Gamma - \sigma(k)\bigr) - t_s\,k_{od}\,\sigma(k) - t_s\,k_{scr}\,u_1(k)\,\sigma(k) \tag{S}
+\sigma^{ub}(k{+}1) = \sigma(k) + t_s\,k_{ads}\,[\text{NH}_3]^{in}(k)\bigl(\Gamma - \sigma(k)\bigr) - t_s\,k_{od}\,\sigma(k) - t_s\,k_{scr}\,u_1(k)\,\sigma(k) \tag{S}
+$$
+
+Equation (S) assumes the catalyst remains unsaturated. In practice, the surface can saturate ($\sigma = \Gamma$) or deplete ($\sigma = 0$). This is enforced by a switching function applied to the unbounded update $\sigma^{ub}$:
+
+$$
+g_{sat}(\sigma) = \begin{cases} \sigma & \text{if } 0 \le \sigma \le \Gamma \\ \Gamma & \text{if } \sigma > \Gamma \\ 0 & \text{if } \sigma < 0 \end{cases}, \qquad \sigma(k) = g_{sat}\bigl(\sigma^{ub}(k)\bigr)
 $$
 
 ### 2b. NOx output
@@ -151,40 +159,71 @@ $$
 \eta(k{+}1) = \eta(k)\;\frac{\tau(k)}{\tau(k{-}1)}\;\frac{u_1(k)}{u_1(k{-}1)}\;\frac{k_{scr}(k)}{k_{scr}(k{-}1)}\;\gamma_{proc}(k{-}1) \;+\; t_s\,k_{s2v}\,\Gamma\,\tau(k)\,u_1(k)\,[\text{NH}_3]^{in}(k{-}1)\,k_{scr}(k)\,k_{ads}(k{-}1)
 $$
 
-This recursion is entirely in terms of $\eta$ (observable) and the measurable inputs ($u_1, u_2, F, T$), but it still contains ratio prefactors and individual rate constants that need to be dealt with.
+**Switching condition without $\sigma$.** From (E):
+
+$$
+\sigma(k) = \frac{\eta(k{+}1)}{\tau(k)\,k_{s2v}\,k_{scr}(k)\,u_1(k)}
+$$
+
+The denominator $\tau\,k_{s2v}\,k_{scr}\,u_1$ is always positive, so the physical constraint $0 \le \sigma \le \Gamma$ maps directly to:
+
+$$
+0 \;\le\; \eta(k{+}1) \;\le\; \underbrace{\tau(k)\,k_{s2v}\,k_{scr}(k)\,u_1(k)\,\Gamma}_{\eta_{sat}(k)}
+$$
+
+where $\eta_{sat}(k)$ is the NOx reduction when the catalyst is fully saturated ($\sigma = \Gamma$). Let $f_\sigma(k)$ denote the unsaturated recursion derived above:
+
+$$
+f_\sigma(k) = \eta(k)\;\frac{\tau(k)}{\tau(k{-}1)}\;\frac{u_1(k)}{u_1(k{-}1)}\;\frac{k_{scr}(k)}{k_{scr}(k{-}1)}\;\gamma_{proc}(k{-}1) \;+\; t_s\,k_{s2v}\,\Gamma\,\tau(k)\,u_1(k)\,[\text{NH}_3]^{in}(k{-}1)\,k_{scr}(k)\,k_{ads}(k{-}1)
+$$
+
+Then the switched dynamics are:
+
+$$
+\eta(k{+}1) = \begin{cases}
+f_\sigma(k) & \text{if } 0 \le f_\sigma(k) \le \eta_{sat}(k) \\[4pt]
+\eta_{sat}(k) & \text{if } f_\sigma(k) > \eta_{sat}(k) \\[4pt]
+0 & \text{if } f_\sigma(k) < 0
+\end{cases}
+\tag{SW}
+$$
+
+The switching is entirely in terms of $\eta$ and the measurable inputs ($u_1, F, T$), with no dependence on the unobservable $\sigma$. The unsaturated recursion $f_\sigma$ still contains ratio prefactors and individual rate constants. The remainder of the derivation parametrizes $f_\sigma$ and $\eta_{sat}$.
 
 ---
 
-## 4. Simplification and parametrization
+## 4. Parametrization and switched model
 
-The recursion from Step 3 is exact but unwieldy. We now make a series of physically motivated simplifications that bring it into a form amenable to parameter estimation.
+The switched recursion (SW) from Step 3 is exact but contains ratio prefactors and individual rate constants. We now simplify and parametrize all three cases ($f_\sigma$, $\eta_{sat}$, and $0$) to obtain the final model.
 
 **Assumptions:**
 
 | | Statement | Consequence |
 |---|-----------|------------|
-| A1 | $T(k) \approx T(k{-}1)$ (temperature changes slowly relative to sampling) | $k_{scr}(k)/k_{scr}(k{-}1) \approx 1$; also $k_{scr}(k)\,k_{ads}(k{-}1) \approx k_{scr/ads}(k{-}1)$, a combined rate constant with its own Arrhenius form |
+| A1 | $T(k) \approx T(k{-}1)$ (temperature changes slowly relative to sampling) | $k_{scr}(k)/k_{scr}(k{-}1) \approx 1$; also $k_{scr}(k)\,k_{ads}(k{-}1) \approx k_{scr/ads}(k{-}1)$ |
 | A2 | Density changes with temperature are negligible | $\tau(k) = \tau_0/F(k)$, so $\tau(k)/\tau(k{-}1) = F(k{-}1)/F(k)$ |
 | A3 | Urea model (U) applies | $[\text{NH}_3]^{in}(k) = \nu_u\,u_2(k)/F(k)$ |
 | A4 | Rate constants vary polynomially with $T$ over the operating range | Chebyshev parametrization (justified by Taylor expansion of Arrhenius) |
 | A5 | $\Gamma$ is constant over the operating range (changes only with aging) | Absorbed into parameter vectors |
 
-**Chebyshev temperature basis.** Rather than estimating Arrhenius parameters directly, the Arrhenius dependence is approximated by low-order polynomials in $T$. For numerical stability, the temperature range $[T_{min}, T_{max}]$ is mapped to $[-1,1]$ using Chebyshev polynomials ($T_0 = (T_{max}+T_{min})/2$, $T_r = (T_{max}-T_{min})/2$):
+**Chebyshev temperature basis.** The Arrhenius dependence is approximated by low-order polynomials in $T$. For numerical stability, $[T_{min}, T_{max}]$ is mapped to $[-1,1]$ ($T_0 = (T_{max}+T_{min})/2$, $T_r = (T_{max}-T_{min})/2$):
 
 $$
 \phi_1(k) = \begin{bmatrix} \tfrac{T-T_0}{T_r} & 1 \end{bmatrix}, \qquad
 \phi_2(k) = \begin{bmatrix} 2\bigl(\tfrac{T-T_0}{T_r}\bigr)^2-1 & \tfrac{T-T_0}{T_r} & 1 \end{bmatrix}
 $$
 
-First-order $\phi_1$ is used for individual rate constants (nearly linear in $T$). Second-order $\phi_2$ is used for the product $k_{scr/ads}\,\Gamma$, which contains an inflection point.
+$\phi_1$ for individual rate constants (nearly linear in $T$); $\phi_2$ for products like $k_{scr/ads}\,\Gamma$ (contains an inflection).
 
-**Flow-scaled NOx reduction.** After applying A1 and A2, the recursion still carries the ratio prefactor $\frac{u_1(k)}{u_1(k{-}1)}\frac{F(k{-}1)}{F(k)}$. To absorb this, define:
+### 4a. Parametrizing $f_\sigma$ (unsaturated case)
+
+After applying A1–A2, the ratio prefactor in $f_\sigma$ becomes $\frac{u_1(k)}{u_1(k{-}1)}\frac{F(k{-}1)}{F(k)}$. Define the **flow-scaled NOx reduction** to absorb it:
 
 $$
 \bar{\eta}_F(k) = \frac{F(k{-}1)}{u_1(k{-}1)}\;\eta(k)
 $$
 
-Multiplying the Step 3 recursion (with A1–A2 applied) by $F(k)/u_1(k)$ converts $\eta \to \bar{\eta}_F$ on both sides. The ratio prefactor becomes unity. Expanding $\gamma_{proc}$ and distributing, then substituting A3–A5 and the Chebyshev basis for each rate constant ($k_{ads} = \phi_1^T\theta_{ads}$, $k_{od} = \phi_1^T\theta_{od}$, $k_{scr} = \phi_1^T\theta_{scr}$, $k_{scr/ads} = \phi_2^T\theta_{scr/ads}$):
+Multiplying $f_\sigma$ by $F(k)/u_1(k)$ converts $\eta \to \bar{\eta}_F$ on both sides (ratio prefactor becomes unity). Expanding $\gamma_{proc}$, substituting A3–A5, and replacing each rate constant with its Chebyshev basis ($k_{ads} = \phi_1^T\theta_{ads}$, $k_{od} = \phi_1^T\theta_{od}$, $k_{scr} = \phi_1^T\theta_{scr}$, $k_{scr/ads} = \phi_2^T\theta_{scr/ads}$):
 
 $$
 \boxed{
@@ -197,7 +236,7 @@ $$
 \tag{D}
 $$
 
-where $u_{2F}(k) = u_2(k)/F(k)$, and the parameter vectors collect the physical constants:
+where $u_{2F}(k) = u_2(k)/F(k)$, and the parameter vectors are:
 
 | Parameter | Definition | Physical content |
 |-----------|-----------|-----------------|
@@ -206,20 +245,9 @@ where $u_{2F}(k) = u_2(k)/F(k)$, and the parameter vectors collect the physical 
 | $\theta_{\eta_{scr}}$ | $t_s\,\theta_{scr}$ | SCR consumption of adsorbed NH$_3$ |
 | $\theta_\Gamma$ | $t_s\,k_{s2v}\,\nu_u\,\Gamma\,\tau_0\,\theta_{scr/ads}$ | adsorption onto free sites ($\propto k_{scr/ads}\,\Gamma$) |
 
-Each term in (D) has a clear physical interpretation. Reading right to left on the RHS: the current state persists ($\bar{\eta}_F(k)$), new NH$_3$ adsorbs onto free sites ($\theta_\Gamma$ term), and three loss channels drain the surface — site-blocking reduces the adsorption rate ($\theta_{\eta_{ads}}$), oxidation and desorption consume stored NH$_3$ ($\theta_{\eta_{od}}$), and SCR itself consumes stored NH$_3$ in proportion to inlet NOx ($\theta_{\eta_{scr}}$).
+### 4b. Parametrizing $\eta_{sat}$ (saturated ceiling)
 
----
-
-## 5. Catalyst saturation — the switched model
-
-Equation (D) was derived assuming the catalyst operates in its unsaturated regime ($0 \le \sigma \le \Gamma$). In practice, the surface can saturate ($\sigma = \Gamma$, all sites occupied) or deplete ($\sigma = 0$, all sites empty). We need to impose these physical bounds.
-
-**Translating the $\sigma$ constraint into $\bar{\eta}_F$ space.** From (E), $\sigma \propto \eta$, and $\bar{\eta}_F$ is a rescaled $\eta$. The constraint $0 \le \sigma \le \Gamma$ becomes bounds on $\bar{\eta}_F$:
-
-- **Lower bound** ($\sigma = 0$): $\bar{\eta}_F = 0$ (no surface NH$_3$, no NOx reduction).
-- **Upper bound** ($\sigma = \Gamma$): maximum possible $\bar{\eta}_F$ when every surface site is occupied.
-
-**Saturated ceiling.** When $\sigma = \Gamma$, the NOx reduction is $\eta(k{+}1) = \tau(k)\,k_{s2v}\,k_{scr}(k)\,u_1(k)\,\Gamma$. Converting to $\bar{\eta}_F$ and parametrizing $k_{scr}$ with $\phi_2$ (quadratic, because $k_{scr} \times \Gamma$ has a non-monotone temperature dependence):
+When $\sigma = \Gamma$, $\eta_{sat}(k) = \tau(k)\,k_{s2v}\,k_{scr}(k)\,u_1(k)\,\Gamma$. Converting to $\bar{\eta}_F$ space (multiply by $F(k)/u_1(k)$) and parametrizing $k_{scr}\,\Gamma$ with $\phi_2$ (quadratic, because $k_{scr} \times \Gamma$ has a non-monotone temperature dependence):
 
 $$
 \bar{\eta}_{F,sat}(k) = \phi_2^T(k)\,\theta_{sat}, \qquad \theta_{sat} = \Gamma\,\tau_0\,k_{s2v}\,\theta_{scr}
@@ -227,21 +255,21 @@ $$
 
 $\theta_{sat}$ is a separate parameter vector (not shared with the unsaturated dynamics).
 
-**Switched model.** Combining the unsaturated dynamics (D) with the saturation bounds:
+### 4c. The switched model
+
+The switched dynamics (SW) from Step 3, now in $\bar{\eta}_F$ space:
 
 $$
 \boxed{
-\bar{\eta}_F(k{+}1) = \max\!\bigl\{0,\;\min\!\bigl\{\text{(D)},\;\phi_2^T(k)\,\theta_{sat}\bigr\}\bigr\}
+\bar{\eta}_F(k{+}1) = \begin{cases}
+\text{(D)} & \text{if } 0 \le \text{(D)} \le \phi_2^T(k)\,\theta_{sat} \\[4pt]
+\phi_2^T(k)\,\theta_{sat} & \text{if } \text{(D)} > \phi_2^T(k)\,\theta_{sat} \\[4pt]
+0 & \text{if } \text{(D)} < 0
+\end{cases}
 }
 $$
 
-| Condition | Regime | $\bar{\eta}_F(k{+}1)$ |
-|-----------|--------|----------------------|
-| $0 \le \text{(D)} \le \phi_2^T\theta_{sat}$ | Unsaturated | (D) |
-| $\text{(D)} > \phi_2^T\theta_{sat}$ | Saturated ($\sigma = \Gamma$) | $\phi_2^T(k)\,\theta_{sat}$ |
-| $\text{(D)} < 0$ | Depleted ($\sigma = 0$) | $0$ |
-
-**Guard condition.** The catalyst remains unsaturated as long as the net adsorption onto free sites is non-negative, i.e., $\Gamma - \sigma \ge 0$. In (D), the adsorption-related terms are $u_{2F}\,\phi_2\,\theta_\Gamma - u_{2F}\,\bar{\eta}_F\,\phi_1\,\theta_{\eta_{ads}}$. Setting this $\ge 0$ and rearranging into a single inner product:
+**Guard condition.** The adsorption-related terms in (D) are $u_{2F}\,\phi_2\,\theta_\Gamma - u_{2F}\,\bar{\eta}_F\,\phi_1\,\theta_{\eta_{ads}}$. The catalyst remains unsaturated when this is non-negative, which rearranges to:
 
 $$
 \phi_g^T(k)\,\theta_{NO_x} \le 0, \qquad
@@ -249,7 +277,7 @@ $$
 \theta_{NO_x} = \begin{bmatrix} \theta_{\eta_{ads}} \\ \theta_{\eta_{od}} \\ \theta_{\eta_{scr}} \\ \theta_\Gamma \end{bmatrix}
 $$
 
-When $\phi_g^T\,\theta_{NO_x} > 0$, the system switches to saturated mode. This guard condition is *linear in the model parameters* — it can be evaluated from the current state and inputs without knowing $\sigma$. This structure — a threshold that depends on the state itself — makes the model a **Self-Excited Threshold Nonlinear ARX (SETNARX)** system.
+When $\phi_g^T\,\theta_{NO_x} > 0$, the system switches to saturated mode. This guard condition is *linear in the model parameters* and can be evaluated without knowing $\sigma$. The threshold depends on the state itself, making the model a **Self-Excited Threshold Nonlinear ARX (SETNARX)** system.
 
 **Tailpipe NOx** (converting back from $\bar{\eta}_F$):
 
