@@ -173,7 +173,7 @@ alleviates the impact of this causality reversal. As a result, a valid CSTR mode
 can be measured, making the system unobservable. This limitation is one of the two key motivations behind the discrete
 nonlinear model developed in this thesis.
 %==
-\begin{figure}[tbp]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=0.35\textwidth]{./figs/1-intro/CSTR_original.png}
     \caption{Schematic of CSTR model for SCR-ASC System}
@@ -186,26 +186,25 @@ adsorption sites, denoted as $\Gamma$, is the sum of occupied and free adsorptio
     \Gamma \geq \con{\ammonia}^{ads} \geq 0
 \end{align}
 Thus, the system dynamics are conditioned on the saturation state of the catalyst. This phenomenon is captured in the
-model through the following switching function:
-\begin{align}
-    g_{sat} \lr{\sigma} = \begin{cases}
-                              \sigma & \text{if } 0 \leq \sigma \leq \Gamma \\
-                              \Gamma & \text{if } \sigma > \Gamma           \\
-                              0      & \text{if } \sigma < 0
-                          \end{cases}
-    \label{eqn::g_sat}
-\end{align}
+model through the switching function~(\ref{eqn::g_sat}).
+% \begin{align}
+%     g_{\sat} \lr{\sigma} = \begin{cases}
+%                               \sigma & \text{if } 0 \leq \sigma \leq \Gamma \\
+%                               \Gamma & \text{if } \sigma > \Gamma           \\
+%                               0      & \text{if } \sigma < 0
+%                           \end{cases} \notag
+% \end{align}
 We have dynamics of the concentration of reactants from the mass balance for the CSTR \cite{hsieh2011development}:
 \begin{widetext}
     \begin{align}
         \bm{
-        \dot{\con{\nox}}^{out}                                                                                                                                                                           \\
-        \dot{\con{\ammonia}}^{out}                                                                                                                                                                       \\
-            \dot{\con{\ammonia}}^{ads}
+        \dot{\con{\nox}}^{out}       \\
+        \dot{\con{\ammonia}}^{out}   \\
+        \dot{\con{\ammonia}}^{ads}
         } & = \bm{
-        \frac{F_{vol}}{V_{scr}} \lr{\con{\nox}^{in}-\con{\nox}^{out}} - k_{scr} \con{\nox}^{out} g_{sat}\lr{\con{\ammonia}^{ads}}                                                                        \\
-        \frac{F_{vol}}{V_{scr}} \lr{\con{\ammonia}^{in}-\con{\ammonia}^{out}} - k_{ads} \con{\ammonia}^{out} \lr{\Gamma - g_{sat}\lr{\con{\ammonia}^{ads}}} + k_{des} g_{sat}\lr{{\con{\ammonia}^{ads}}} \\
-            k_{ads} \con{\ammonia}^{out} \lr{\Gamma - g_{sat}\lr{\con{\ammonia}^{ads}}} - k_{des} g_{sat}\lr{{\con{\ammonia}^{ads}}} - k_{scr} \con{\nox}^{out} g_{sat}\lr{\con{\ammonia}^{ads}}
+        \frac{F_{vol}}{V_{scr}} \lr{\con{\nox}^{in}-\con{\nox}^{out}} - k_{scr}\, \con{\nox}^{out}\, g_{\sat}\lr{\con{\ammonia}^{ads}}  \\
+        \frac{F_{vol}}{V_{scr}} \lr{\con{\ammonia}^{in}-\con{\ammonia}^{out}} - k_{ads}\, \con{\ammonia}^{out} \lr{\Gamma - g_{\sat}\lr{\con{\ammonia}^{ads}}} + k_{des}\, g_{\sat}\lr{\con{\ammonia}^{ads}} \\
+        k_{ads}\, \con{\ammonia}^{out} \lr{\Gamma - g_{\sat}\lr{\con{\ammonia}^{ads}}} - k_{des}\, g_{\sat}\lr{\con{\ammonia}^{ads}} - k_{scr}\, \con{\nox}^{out}\, g_{\sat}\lr{\con{\ammonia}^{ads}}
         } \label{eqn::cstr_mass_bal}
     \end{align}
 \end{widetext}
