@@ -1,11 +1,27 @@
 \subsection{Reactions and Rate Equations}
 %TODO: Add references to the claims
 The SCR-ASC system involves urea decomposition, ammonia adsorption/desorption, selective catalytic reduction of $\nox$,
-and ammonia oxidation (AMOX) on both SCR and ASC surfaces. For a tractable model, we retain only three dominant
-reactions: the standard SCR reaction (fast and slow SCR reactions are omitted, as the exhaust flow rate ensures they do
-not significantly affect tailpipe concentrations), the AMOX reactions on both SCR and ASC, lumped into a single
-oxidation reaction with $100\%$ $\nitrogen$ selectivity (valid for $T > 225\,°\text{C}$), and $\ammonia$
-adsorption and desorption on the catalyst surface. The Eley-Rideal mechanism is assumed for the reaction of gaseous $\nox$ with surface-adsorbed $\ammonia$.
+and ammonia oxidation (AMOX) on both SCR and ASC surfaces. The following assumptions reduce the full reaction network to
+a tractable form.
+
+\itbf{$A_1$:} All $\nox$ in the exhaust is $\nitrox$, since commercially available $\nox$ sensors cannot differentiate
+between $\nitrox$ and $\notwo$ \cite{nova2014urea}.
+
+\itbf{$A_2$:} Three dominant reactions are retained: the standard SCR reaction, ammonia oxidation (AMOX), and ammonia
+adsorption/desorption. Fast and slow SCR reactions are omitted, as the exhaust flow rate ensures they do not
+significantly affect tailpipe concentrations.
+
+\itbf{$A_3$:} The AMOX reactions on both SCR and ASC surfaces are lumped into a single oxidation reaction with $100\%$
+$\nitrogen$ selectivity (valid for $T > 225\,°\text{C}$).
+
+\itbf{$A_4$:} The Eley-Rideal mechanism governs the standard SCR reaction: gaseous $\nox$ reacts with surface-adsorbed
+$\ammonia$.
+
+\itbf{$A_5$:} Mass transfer is neglected; the catalyst kinetics are reaction-controlled, as the standard SCR reaction
+rate exceeds the exhaust fluid flow rate.
+
+\itbf{$A_6$:} The SCR-ASC chamber is modelled as a plug-flow reactor; reaction rates within each residence time are
+governed by inlet gas-phase concentrations.
 %===
 \begin{enumerate}
     \item Standard SCR reaction:

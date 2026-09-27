@@ -172,14 +172,14 @@ CSTR, the causality of the reaction rates is reversed. Employing multiple CSTRs 
 alleviates the impact of this causality reversal. As a result, a valid CSTR model generally contains more states than
 can be measured, making the system unobservable. This limitation is one of the two key motivations behind the discrete
 nonlinear model developed in this thesis.
-
+%==
 \begin{figure}[tbp]
     \centering
     \includegraphics[width=0.35\textwidth]{./figs/1-intro/CSTR_original.png}
     \caption{Schematic of CSTR model for SCR-ASC System}
     \label{fig::cstr_schematic}
 \end{figure}
-
+%===
 One additional consideration is the saturation of adsorption sites on the catalyst surface. The total concentration of
 adsorption sites, denoted as $\Gamma$, is the sum of occupied and free adsorption sites. Thus, at any given time,
 \begin{align}
@@ -217,8 +217,8 @@ injection that is converted to ammonia. This can be modelled by the following eq
 \end{align}
 The equations~\ref{eqn::cstr_urea_inj}~and~\ref{eqn::cstr_mass_bal} constitute the nonlinear state-space model for the
 SCR-ASC system under the single CSTR assumption. However, this model lacks parsimony and identifiability given the
-current measurement set. To obtain an identifiable model, the nonlinear system can be linearized, and lumped parameters
-for input-output equations can be derived based on the available measurements~\cite{charla2024reduced}.
+current measurement system. To obtain an identifiable model, the nonlinear system can be linearized, and lumped
+parameters for input-output equations can be derived based on the available measurements~\cite{charla2024reduced}.
 
 Furthermore, the hybrid dynamics modelled in the above equations capture the high-frequency reaction kinetics coupled
 with mass flow. The slowest process, or dominant mode, can be approximated as a first-order system with residence time
