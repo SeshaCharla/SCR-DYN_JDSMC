@@ -182,9 +182,7 @@ nonlinear model developed in this thesis.
 %===
 One additional consideration is the saturation of adsorption sites on the catalyst surface. The total concentration of
 adsorption sites, denoted as $\Gamma$, is the sum of occupied and free adsorption sites. Thus, at any given time,
-\begin{align}
-    \Gamma \geq \con{\ammonia}^{ads} \geq 0
-\end{align}
+$\Gamma \geq \con{\ammonia}^{ads} \geq 0$.
 Thus, the system dynamics are conditioned on the saturation state of the catalyst. This phenomenon is captured in the
 model through the switching function~(\ref{eqn::g_sat}).
 % \begin{align}
@@ -194,27 +192,28 @@ model through the switching function~(\ref{eqn::g_sat}).
 %                               0      & \text{if } \sigma < 0
 %                           \end{cases} \notag
 % \end{align}
-We have dynamics of the concentration of reactants from the mass balance for the CSTR \cite{hsieh2011development}:
-\begin{widetext}
-    \begin{align}
-        \bm{
-        \dot{\con{\nox}}^{out}       \\
-        \dot{\con{\ammonia}}^{out}   \\
-        \dot{\con{\ammonia}}^{ads}
-        } & = \bm{
-        \frac{F_{vol}}{V_{scr}} \lr{\con{\nox}^{in}-\con{\nox}^{out}} - k_{scr}\, \con{\nox}^{out}\, g_{\sat}\lr{\con{\ammonia}^{ads}}  \\
-        \frac{F_{vol}}{V_{scr}} \lr{\con{\ammonia}^{in}-\con{\ammonia}^{out}} - k_{ads}\, \con{\ammonia}^{out} \lr{\Gamma - g_{\sat}\lr{\con{\ammonia}^{ads}}} + k_{des}\, g_{\sat}\lr{\con{\ammonia}^{ads}} \\
-        k_{ads}\, \con{\ammonia}^{out} \lr{\Gamma - g_{\sat}\lr{\con{\ammonia}^{ads}}} - k_{des}\, g_{\sat}\lr{\con{\ammonia}^{ads}} - k_{scr}\, \con{\nox}^{out}\, g_{\sat}\lr{\con{\ammonia}^{ads}}
-        } \label{eqn::cstr_mass_bal}
-    \end{align}
-\end{widetext}
+We have dynamics of the concentration of reactants from the mass balance for the CSTR \cite{hsieh2011development}. Let
+$\bar F = F_{vol}/V_{scr}$ and $\sigma = g_{\sat}\lr{\con{\ammonia}^{ads}}$:
+\begin{align}
+    \dot{\con{\nox}}^{out} &= \bar F \lr{\con{\nox}^{in} - \con{\nox}^{out}}
+        - k_{scr}\, \con{\nox}^{out}\, \sigma
+    \label{eqn::cstr_nox}\\
+    \dot{\con{\ammonia}}^{out} &= \bar F \lr{\con{\ammonia}^{in} - \con{\ammonia}^{out}} \notag\\
+        &\quad - k_{ads}\, \con{\ammonia}^{out} \lr{\Gamma - \sigma}
+        + k_{des}\, \sigma
+    \label{eqn::cstr_nh3}\\
+    \dot{\con{\ammonia}}^{ads} &= k_{ads}\, \con{\ammonia}^{out} \lr{\Gamma - \sigma} \notag\\
+        &\quad - k_{des}\, \sigma
+        - k_{scr}\, \con{\nox}^{out}\, \sigma
+    \label{eqn::cstr_ads}
+\end{align}
 The actual input to the system is urea (AdBlue ($32.5\%$ aqueous urea solution) \cite{nova2014urea})
 injection that is converted to ammonia. This can be modelled by the following equation~(\ref{eqn::cstr_urea_inj}).
 \begin{align}
     \dot{\con{\ammonia}}^{in} & = \frac{1}{\tau_{urea}} \lrf{ - \con{\ammonia}^{in} +   \frac{b_{urea}}{F_{vol}}  u_{inj}}
     \label{eqn::cstr_urea_inj}
 \end{align}
-The equations~\ref{eqn::cstr_urea_inj}~and~\ref{eqn::cstr_mass_bal} constitute the nonlinear state-space model for the
+Equations~(\ref{eqn::cstr_nox})--(\ref{eqn::cstr_ads})~and~(\ref{eqn::cstr_urea_inj}) constitute the nonlinear state-space model for the
 SCR-ASC system under the single CSTR assumption. However, this model lacks parsimony and identifiability given the
 current measurement system. To obtain an identifiable model, the nonlinear system can be linearized, and lumped
 parameters for input-output equations can be derived based on the available measurements~\cite{charla2024reduced}.
