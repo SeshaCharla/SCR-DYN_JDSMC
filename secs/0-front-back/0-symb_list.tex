@@ -1,22 +1,54 @@
-\section*{Nomenclature}
-
+% \section*{Nomenclature}
 \begin{nomenclature}
+    % --- Brackets and Bullets ---
     \entry{$\lrb{\bullet}$}{Concentration of species $\bullet$ $(mol/m^3)$}
     \entry{$\mol{\bullet}$}{Number of moles of species $\bullet$ $(mol)$}
+    % --- Small Alphabets ---
     \entry{$b_{urea}$}{Urea-to-ammonia conversion factor}
     \entry{$f_s$}{Sampling frequency $(Hz)$}
-    \entry{$F_{vol}$}{Volumetric flow rate of exhaust gases $(m^3/s)$}
-    \entry{$g_{sat}(\sigma)$}{Saturation function for adsorbed ammonia}
-    \entry{$\Gamma$}{Total surface concentration of adsorption sites $(mol/m^2)$}
+    \entry{$f_\sigma(k)$}{Unsaturated $\eta$-recursion function}
+    \entry{$g_{\sat}(\sigma)$}{Saturation switching function for adsorbed ammonia}
     \entry{$k_{ads}$}{Ammonia adsorption rate constant}
     \entry{$k_{des}$}{Ammonia desorption rate constant}
-    \entry{$k_{ox}$}{Ammonia oxidation (AMOX) rate constant}
+    \entry{$k_{od}$}{Combined oxidation and desorption rate constant}
+    \entry{$k_{oxi}$}{Ammonia oxidation (AMOX) rate constant}
+    \entry{$k_{s2v}$}{Surface-to-volume ratio $A_{scr}/V$ $(m^{-1})$}
     \entry{$k_{scr}$}{Standard SCR reaction rate constant}
-    \entry{$T$}{Temperature $(K)$}
+    \entry{$n$}{Number of residence times per sampling period}
+    \entry{$r_u$}{Urea decomposition rate}
     \entry{$t_s$}{Sampling time $(s)$}
-    \entry{$\tau$}{Residence time of exhaust flow through SCR-ASC system $(s)$}
-    \entry{$\tau_{urea}$}{Time constant for urea-to-ammonia conversion $(s)$}
-    \entry{$\Theta_{free}$}{Free adsorption sites}
-    \entry{$u_{inj}$}{Urea injection rate (control input)}
+    \entry{$u_1(k)$}{Inlet $\nox$ concentration $\con{\nox}^{in}(k)$ $(mol/m^3)$}
+    \entry{$u_2(k)$}{Urea injection rate (control input)}
+    \entry{$u_{2F}(k)$}{Flow-normalized urea injection rate $u_2(k)/F(k)$}
+    \entry{$u_{inj}$}{Urea injection rate (CSTR model)}
+    \entry{$x_1(k)$}{Outlet $\nox$ concentration $\con{\nox}^{out}(k)$ $(mol/m^3)$}
+    % --- Capital Alphabets ---
+    \entry{$F(k)$}{Exhaust mass flow rate $(kg/s)$}
+    \entry{$F_{vol}$}{Volumetric flow rate of exhaust gases $(m^3/s)$}
+    \entry{$G(k)$}{Guard condition for mode switching}
+    \entry{$T(k)$}{Temperature $(K)$}
+    \entry{$V$}{Chamber volume of SCR-ASC system $(m^3)$}
     \entry{$V_{scr}$}{Volume of the SCR catalyst chamber $(m^3)$}
+    % --- Small Greek ---
+    \entry{$\gamma_{proc}(k)$}{Process dynamics rate factor}
+    \entry{$\varepsilon_{\sat}$}{Saturation detection threshold $(mol/m^3)$}
+    \entry{$\eta(k)$}{$\nox$ reduction per sample $(mol/m^3)$}
+    \entry{$\bar\eta_F(k)$}{Flow-scaled $\nox$ reduction}
+    \entry{$\eta_{\sat}(k)$}{$\nox$ reduction ceiling at catalyst saturation}
+    \entry{$\theta_{\sat}$}{Parameter vector for saturated model}
+    \entry{$\theta_{\nox}$}{Parameter vector for unsaturated dynamics and guard condition}
+    \entry{$\nu_u$}{Urea dosing constant $(2 r_u t_s \rho_0)$}
+    \entry{$\rho_0$}{Reference exhaust gas density $(kg/m^3)$}
+    \entry{$\sigma(k)$}{Average surface concentration of adsorbed ammonia $(mol/m^2)$}
+    \entry{$\tau$}{Residence time of exhaust flow through SCR-ASC system $(s)$}
+    \entry{$\tau_0$}{Reference residence time constant $(V \rho_0)$}
+    \entry{$\tau_{urea}$}{Time constant for urea-to-ammonia conversion $(s)$}
+    \entry{$\phi_1(k)$}{First-order Chebyshev basis vector for temperature}
+    \entry{$\phi_2(k)$}{Second-order Chebyshev basis vector for temperature}
+    \entry{$\phi_{\nox}(k)$}{Regressor vector for unsaturated $\nox$ dynamics}
+    \entry{$\phi_{\sat}(k)$}{Regressor for saturated model}
+    \entry{$\phi_g(k)$}{Guard condition regressor vector}
+    % --- Capital Greek ---
+    \entry{$\Gamma$}{Total surface concentration of adsorption sites $(mol/m^2)$}
+    \entry{$\Theta_{free}$}{Free adsorption sites on catalyst surface}
 \end{nomenclature}
