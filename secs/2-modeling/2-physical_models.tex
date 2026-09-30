@@ -19,7 +19,7 @@ concentration changes sub-step to sub-step. Summing telescopically from $i = 0$ 
 cancel):
 \begin{multline}
     \con{\ammonia}^{ads}(k{+}1) - \con{\ammonia}^{ads}(k) = \\
-    \tau \sum_{i=0}^{n-1} \lr{\Gamma\,\gamma_{ads}(k) - \con{\ammonia}^{ads}(k{+}i\tau)\,\gamma_{des}(k)}
+    \tau \!\sum_{i=0}^{n-1}\! \lr{\Gamma\gamma_{ads}(k) - \con{\ammonia}^{ads}(k{+}i\tau)\gamma_{des}(k)}
 \end{multline}
 where $\gamma_{ads} = k_{ads}\,\con{\ammonia}^{in}$ and
 $\gamma_{des} = k_{ads}\,\con{\ammonia}^{in} + k_{des} + k_{scr}\,\con{\nox}^{in} + k_{oxi}$.
@@ -34,8 +34,8 @@ This $\sigma(k)$ is unobservable. We cannot measure the surface concentration at
 \itbf{$A_7$:} Zero-order hold for the average surface concentration: $\sigma(k) \approx \con{\ammonia}^{ads}(k)$,
 i.e., the surface concentration at the start of the sample dominates the average. Using $n\tau = t_s$:
 \begin{multline}
-    \sigma^{ub}(k{+}1) = \sigma(k) + t_s\,k_{ads}\,\con{\ammonia}^{in}(k)\lr{\Gamma - \sigma(k)} \\
-        - t_s\,k_{od}\,\sigma(k) - t_s\,k_{scr}\,u_1(k)\,\sigma(k)
+    \sigma^{ub}(k{+}1) = \sigma(k) + t_s k_{ads}\con{\ammonia}^{in}(k)\lr{\Gamma - \sigma(k)} \\
+        - t_s k_{od}\,\sigma(k) - t_s k_{scr}\,u_1(k)\,\sigma(k)
     \label{eqn::sigma_dynamics}
 \end{multline}
 Equation~(\ref{eqn::sigma_dynamics}) assumes the catalyst remains unsaturated. In practice, the surface can saturate
@@ -58,7 +58,7 @@ Unlike adsorbed $\ammonia$, $\nox$ has no storage on the surface. The outlet con
 depends only on the inlet concentration and the surface state during that sub-step:
 \begin{multline}
     \con{\nox}^{out}(k{+}(i{+}1)\tau) = \con{\nox}^{in}(k{+}i\tau) \\
-        - \tau\,k_{s2v}\,k_{scr}\,\con{\ammonia}^{ads}(k{+}i\tau)\,\con{\nox}^{in}(k{+}i\tau)
+        - \tau k_{s2v} k_{scr}\con{\ammonia}^{ads}(k{+}i\tau)\con{\nox}^{in}(k{+}i\tau)
 \end{multline}
 There is no telescopic accumulation. The measured outlet $\nox$ corresponds to the last residence time ($i = n{-}1$).
 Applying ZOH for inlet $\nox$ ($u_1(k)$) and the same surface approximation ($\sigma(k)$):

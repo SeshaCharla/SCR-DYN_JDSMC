@@ -41,22 +41,19 @@ $u_1(k)\, F(k{-}1) / [u_1(k{-}1)\, F(k)]$. To absorb this, define the \textit{fl
 Multiplying~(\ref{eqn::f_sigma}) by $F(k)/u_1(k)$ converts $\eta \to \bar\eta_F$ on both sides (the ratio prefactor
 becomes unity).
 
-The inlet $\ammonia$ concentration follows the urea dosing
-model~(\ref{eqn::urea_dosing}): $\con{\ammonia}^{in}(k) = \nu_u\, u_2(k)/F(k)$, and the total surface site
-concentration $\Gamma$ is constant over the operating range (it changes only with aging).
-Expanding $\gamma_{proc}$~(\ref{eqn::gamma_proc}), substituting these relations, and replacing each rate constant
-with its Chebyshev basis ($k_{ads} = \phi_1^T\theta_{ads}$, $k_{od} = \phi_1^T\theta_{od}$,
-$k_{scr} = \phi_1^T\theta_{scr}$, $k_{scr/ads}\,\Gamma = \phi_2^T\theta_{scr/ads}$):
-\begin{align}
-    \bar \eta_F (k{+}1) = \bar \eta_F (k) &+ u_{2F}(k{-}1)\,\phi_2(k{-}1)\, \theta_\Gamma
-        \notag\\
-    &- u_{2F}(k{-}1)\, \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{ads}}
-        \notag\\
-    &- \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{od}}
-        \notag\\
-    &- u_1(k{-}1)\, \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{scr}}
+The inlet $\ammonia$ concentration follows the urea dosing model~(\ref{eqn::urea_dosing}): $\con{\ammonia}^{in}(k) =
+\nu_u\, u_2(k)/F(k)$, and the total surface site concentration $\Gamma$ is constant over the operating range (it changes
+only with aging). Expanding $\gamma_{proc}$~(\ref{eqn::gamma_proc}), substituting these relations, and replacing each
+rate constant with its Chebyshev basis ($k_{ads} = \phi_1^T\theta_{ads}$, $k_{od} = \phi_1^T\theta_{od}$, $k_{scr} =
+\phi_1^T\theta_{scr}$, $k_{scr/ads}\,\Gamma = \phi_2^T\theta_{scr/ads}$):
+
+\begin{multline}
+    \bar \eta_F (k{+}1) = \bar \eta_F (k) + u_{2F}(k{-}1)\,\phi_2(k{-}1)\, \theta_\Gamma \\
+        - u_{2F}(k{-}1)\, \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{ads}} \\
+        - \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{od}} \\
+        - u_1(k{-}1)\, \bar \eta_F (k)\, \phi_1(k{-}1)\, \theta_{\eta_{scr}}
     \label{eqn::eta_bar_dynamics}
-\end{align}
+\end{multline}
 where $u_{2F}(k) = u_2(k)/F(k)$, and the four parameter groups are:
 \begin{inparaenum}[(1)]
     \item $\theta_\Gamma = t_s\, k_{s2v}\, \nu_u\, \Gamma\, \tau_0\, \theta_{scr/ads}$:

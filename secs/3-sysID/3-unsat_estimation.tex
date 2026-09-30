@@ -15,8 +15,6 @@ where $y_{\nox}(k) = \bar\eta_F(k{+}1) - \bar\eta_F(k)$. The regressor $\phi_{\n
 quantities and is constructed to avoid unnecessary multiplication and division of the same signals, which would amplify
 noise.
 
-\subsubsection{Estimation on Unsaturated Segments}
-
 $\theta_{\nox}$ is estimated by least squares on the unsaturated segments identified
 in~\S\ref{sec::segment_id}. Under Gaussian model structure error, least squares is the maximum likelihood
 estimate. These are the same parameters that appear in the guard
@@ -49,11 +47,11 @@ from initial conditions and inputs ($u_1, u_2, F, T$) alone on the training data
 \end{table}
 
 \begin{figure}[!ht]
-    \begin{minipage}{0.49\textwidth}
+    \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{./figs/3-sysID/eta_sim_dg_cftp.png}
     \end{minipage}
-    \begin{minipage}{0.49\textwidth}
+    \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{./figs/3-sysID/eta_sim_aged_cftp.png}
     \end{minipage}
@@ -62,11 +60,11 @@ from initial conditions and inputs ($u_1, u_2, F, T$) alone on the training data
 \end{figure}
 
 \begin{figure}[!ht]
-    \begin{minipage}{0.49\textwidth}
+    \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{./figs/3-sysID/eta_sim_dg_hftp.png}
     \end{minipage}
-    \begin{minipage}{0.49\textwidth}
+    \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{./figs/3-sysID/eta_sim_aged_hftp.png}
     \end{minipage}
@@ -75,11 +73,11 @@ from initial conditions and inputs ($u_1, u_2, F, T$) alone on the training data
 \end{figure}
 
 \begin{figure}[!ht]
-    \begin{minipage}{0.49\textwidth}
+    \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{./figs/3-sysID/eta_sim_dg_rmc.png}
     \end{minipage}
-    \begin{minipage}{0.49\textwidth}
+    \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{./figs/3-sysID/eta_sim_aged_rmc.png}
     \end{minipage}
